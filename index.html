@@ -124,21 +124,6 @@
         </section>
         
         <section id="game" class="page-section">
-            <div id="game-start-screen">
-    <h2>Вітаємо у Bloomora Game!</h2>
-    <p>Лови квіти у кошик. Збери 15 штук, щоб отримати знижку!</p>
-    <button id="start-btn" class="game-btn">Почати гру</button>
-</div>
-
-<div id="game-over-screen" class="hidden">
-    <h2 id="over-title">Гру закінчено!</h2>
-    <p id="final-score"></p>
-    <p id="discount-info"></p>
-    <div class="game-buttons">
-        <button id="restart-btn" class="game-btn">Ще раз</button>
-        <button id="exit-btn" class="game-btn" onclick="showSection('home')">Вийти</button>
-    </div>
-</div>
     <div class="game-wrapper">
         <h2 class="section-title">Flower Game</h2>
         <p class="section-subtitle">Лови квіти у кошик, щоб отримати знижку!</p>
@@ -146,13 +131,19 @@
         <div class="game-container">
             <canvas id="flowerGame"></canvas>
             
+            <div id="game-start-screen">
+                <h2>Вітаємо у Bloomora Game!</h2>
+                <p>Зберіть 15 квіток, щоб отримати секретний промокод на знижку.</p>
+                <button id="start-btn" class="game-btn">Почати гру</button>
+            </div>
+
             <div id="game-over-screen" class="hidden">
-                <h2 style="margin-bottom: 10px;">Гру закінчено!</h2>
-                <p id="final-score" style="font-size: 20px; color: #c96f8f; font-weight: 600;"></p>
-                <p id="discount-info" style="margin-bottom: 20px;"></p>
-                <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button id="restart-btn" class="main-btn" style="font-size: 14px; padding: 10px 20px;">Спробувати ще раз</button>
-                    <button onclick="showSection('home')" class="back-btn" style="margin-bottom: 0;">Вийти</button>
+                <h2 id="over-title">Гру закінчено!</h2>
+                <p id="final-score"></p>
+                <p id="discount-info"></p>
+                <div class="game-buttons">
+                    <button id="restart-btn" class="game-btn">Ще раз</button>
+                    <button id="exit-btn" class="game-btn" onclick="showSection('home')">Вийти</button>
                 </div>
             </div>
         </div>
