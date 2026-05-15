@@ -1,6 +1,3 @@
-console.log("APP.JS ПРАЦЮЄ!");
-alert("Скрипт завантажено");
-
 let categories = [];
 let products = [];
 let currentProducts = [];
@@ -264,42 +261,136 @@ function updateAccountNavbar() {
 }
 
 /* Вставка Варі */
-// --- Логіка Flower Game (Спрощена) ---
+// --- Фінальна логіка Flower Game ---
 
 const canvas = document.getElementById('flowerGame');
-if (!canvas) {
-    console.error("CANVAS НЕ ЗНАЙДЕНО!");
-} else {
-    const ctx = canvas.getContext('2d');
-    canvas.width = 400;
-    canvas.height = 500;
+const ctx = canvas.getContext('2d');
+const gameOverScreen = document.getElementById('game-over-screen');
+const restartBtn = document.getElementById('restart-btn');
+const finalScoreText = document.getElementById('final-score');
+const discountInfoText = document.getElementById('discount-info');
 
-    let basketX = 160;
+canvas.width = 400;
+canvas.height = 500;
 
-    function drawSimple() {
-        // Очищення
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+let gameRunning = false;
+let score = 0;
+let flowers = [];
+let animationId;
 
-        // Кошик (просто червоний квадрат для тесту)
-        ctx.fillStyle = "red";
-        ctx.fillRect(basketX, 440, 80, 40);
+let basket = {
+    x: canvas.width / 2 - 40,
+    y: canvas.height - 60,
+    width: 80,
+    height: 40,
+    speed: 8
+};
 
-        // Рахунок
-        ctx.fillStyle = "black";
-        ctx.font = "20px Arial";
-        ctx.fillText("Тест малювання", 20, 30);
+let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
 
-        requestAnimationFrame(drawSimple);
+document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = true; });
+document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
+
+function spawnFlower() {
+    flowers.push({
+        x: Math.random() * (canvas.width - 30),
+        y: -30,
+        size: 30,
+        speed: 2 + Math.random() * 3
+    });
+}
+
+function endGame() {
+    gameRunning = false;
+    cancelAnimationFrame(animationId);
+    gameOverScreen.classList.remove('hidden');
+    
+    finalScoreText.textContent = `Спіймано квітів: ${score}`;
+    let goal = 15;
+    if (score >= goal) {
+        discountInfoText.textContent = "Вітаємо! Ваша знижка 10%: BLOOM10";
+    } else {
+        discountInfoText.textContent = `До знижки не вистачило ${goal - score} шт.`;
     }
+}
 
-    // Керування
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'a' || e.key === 'ArrowLeft') basketX -= 10;
-        if (e.key === 'd' || e.key === 'ArrowRight') basketX += 10;
+function update() {
+    if (!gameRunning) return;
+
+    if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
+    if (keys.ArrowRight || keys.d) basket.x += basket.speed;
+
+    if (basket.x < 0) basket.x = 0;
+    if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
+
+    if (Math.random() < 0.02) spawnFlower();
+
+    for (let i = flowers.length - 1; i >= 0; i--) {
+        let f = flowers[i];
+        f.y += f.speed;
+
+        // Перевірка на зіткнення
+        if (f.y + f.size > basket.y && f.x + f.size > basket.x && f.x < basket.x + basket.width) {
+            flowers.splice(i, 1);
+            score++;
+        } else if (f.y > canvas.height) {
+            endGame();
+        }
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Кошик
+    ctx.fillStyle = '#c96f8f';
+    ctx.beginPath();
+    ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
+    ctx.fill();
+
+    // Квіти
+    flowers.forEach(f => {
+        ctx.fillStyle = '#f7dfe6';
+        ctx.beginPath();
+        ctx.arc(f.x + f.size/2, f.y + f.size/2, f.size/2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffcc00';
+        ctx.beginPath();
+        ctx.arc(f.x + f.size/2, f.y + f.size/2, 5, 0, Math.PI * 2);
+        ctx.fill();
     });
 
-    console.log("Запуск циклу малювання...");
-    drawSimple();
+    ctx.fillStyle = '#5b3a46';
+    ctx.font = 'bold 18px Poppins';
+    ctx.fillText(`Рахунок: ${score}`, 20, 30);
 }
+
+function gameLoop() {
+    if (!gameRunning) return;
+    update();
+    draw();
+    animationId = requestAnimationFrame(gameLoop);
+}
+
+function startGame() {
+    gameRunning = true;
+    score = 0;
+    flowers = [];
+    basket.x = canvas.width / 2 - 40;
+    gameOverScreen.classList.add('hidden');
+    gameLoop();
+}
+
+// Автозапуск при вході в гру
+setInterval(() => {
+    const gameSection = document.getElementById('game');
+    if (gameSection?.classList.contains('active') && !gameRunning && gameOverScreen.classList.contains('hidden')) {
+        startGame();
+    }
+}, 500);
+
+if (restartBtn) restartBtn.onclick = startGame;
+
+draw();
+
 /* Закінчення вставки */
