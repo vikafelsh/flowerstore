@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloomora Flowers</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="brand" onclick="showSection('home')">
+            Bloomora
+        </div>
+
+        <button class="hamburger" id="hamburgerBtn">
+            ☰
+        </button>
+
+        <nav class="nav-menu" id="navMenu">
+            <a href="#" onclick="showSection('home')">Home</a>
+            <a href="#" onclick="showSection('catalog')">Catalog</a>
+            <a href="#" onclick="showSection('custom')">Custom Bouquet</a>
+            <a href="#" onclick="showSection('game')">Flower Game</a>
+            <a href="#" onclick="showSection('about')">About</a>
+            <a href="#" onclick="showSection('contact')">Contact</a>
+        </nav>
+
+        <div class="account-box">
+            <button class="account-btn" onclick="showAccountPanel()">My Account</button>
+            <div id="accountInfo" class="account-info"></div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <div class="hero-text">
+                    <p class="small-title">Fresh flowers for every moment</p>
+                    <h1>Beautiful bouquets made with love</h1>
+                    <p>
+                        Discover romantic bouquets, wedding flowers, indoor plants,
+                        gift boxes and seasonal flower collections.
+                    </p>
+                    <button onclick="showSection('catalog')" class="main-btn">
+                        View Catalog
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="catalog" class="page-section">
+            <h2 class="section-title">Flower Catalog</h2>
+            <p class="section-subtitle">
+                Choose a category and explore our flower collection.
+            </p>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search flowers...">
+    <button onclick="searchProducts()">Search</button>
+    <button onclick="clearSearch()">Clear</button>
+</div>
+
+<p id="searchMessage" class="search-message"></p>
+
+<div id="categoriesContainer" class="categories-container"></div>
+
+            <div id="categoriesContainer" class="categories-container"></div>
+
+            <h3 id="productsTitle" class="products-title"></h3>
+            <div id="productsContainer" class="products-container"></div>
+        </section>
+
+        <section id="productsPage" class="page-section">
+    <button class="back-btn" onclick="showSection('catalog')">← Back to Categories</button>
+    <h2 id="categoryPageTitle" class="section-title"></h2>
+    <p class="section-subtitle">Choose a product to see more details.</p>
+    <div id="categoryProductsContainer" class="products-container"></div>
+</section>
+
+<section id="productDetailsPage" class="page-section">
+    <button class="back-btn" onclick="backToCurrentCategory()">← Back to Products</button>
+
+    <div class="product-details">
+        <img id="detailsImage" src="" alt="Product image">
+
+        <div class="details-content">
+            <p class="small-title">Flower product</p>
+            <h2 id="detailsName"></h2>
+            <p id="detailsDescription"></p>
+            <div id="detailsPrice" class="details-price"></div>
+            <button class="buy-btn" onclick="buyProduct()">Buy Now</button>
+        </div>
+    </div>
+</section>
+
+<section id="accountPage" class="page-section">
+    <div class="account-page">
+        <h2>My Account</h2>
+        <p class="section-subtitle">Enter your personal information.</p>
+
+        <div class="account-form">
+            <input type="text" id="firstNameInput" placeholder="First name">
+            <input type="text" id="lastNameInput" placeholder="Last name">
+            <button onclick="saveAccount()">Save</button>
+        </div>
+
+        <div id="savedAccountData" class="saved-account-data"></div>
+    </div>
+</section>
+
+        <section id="custom" class="page-section">
+            <div class="placeholder-page">
+                <h2>Custom Bouquet</h2>
+                <p>
+                    This section will allow users to create their own bouquet
+                    by choosing flowers, colors and packaging.
+                </p>
+                <div class="coming-soon">Coming Soon</div>
+            </div>
+        </section>
+
+        <section id="game" class="page-section">
+            <div class="placeholder-page">
+                <h2>Flower Game</h2>
+                <p>
+                    A small flower-themed arcade game will be available here.
+                </p>
+                <div class="coming-soon">Game Coming Soon</div>
+            </div>
+        </section>
+
+        <section id="about" class="page-section">
+            <div class="info-page">
+                <h2>About Bloomora</h2>
+                <p>
+                    Bloomora Flowers is a cozy online flower shop created for people
+                    who love elegant bouquets, fresh plants and beautiful gifts.
+                </p>
+                <p>
+                    Our catalog includes flowers for birthdays, weddings, romantic
+                    moments, home decoration and special seasonal events.
+                </p>
+            </div>
+        </section>
+
+        <section id="contact" class="page-section">
+            <div class="info-page">
+                <h2>Contact Us</h2>
+                <p>Email: bloomora.flowers@gmail.com</p>
+                <p>Phone: +380 00 000 00 00</p>
+                <p>Address: Flower Street, 12</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p id="userGreeting">Welcome to Bloomora Flowers!</p>
+        <p>Developed by Student Team</p>
+        <p>© 2026 Bloomora Flowers. All rights reserved.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

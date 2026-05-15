@@ -1,0 +1,186 @@
+[
+    {
+        "id": 1,
+        "categoryId": "gift_bouquets",
+        "name": "Red Roses Bouquet",
+        "shortDescription": "Classic red roses for a special gift.",
+        "fullDescription": "A beautiful bouquet of fresh red roses. It is a perfect choice for romantic moments, birthdays, anniversaries or elegant gifts.",
+        "price": "$45",
+        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=Red+Roses"
+    },
+    {
+        "id": 2,
+        "categoryId": "gift_bouquets",
+        "name": "Hydrangea Bouquet",
+        "shortDescription": "Soft hydrangeas in pastel colors.",
+        "fullDescription": "A delicate bouquet with hydrangeas. It looks gentle, elegant and is suitable for birthdays, family celebrations or stylish home decoration.",
+        "price": "$52",
+        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=Hydrangea"
+    },
+    {
+        "id": 3,
+        "categoryId": "gift_bouquets",
+        "name": "White Chrysanthemums",
+        "shortDescription": "Fresh white chrysanthemums with greenery.",
+        "fullDescription": "A light and elegant bouquet of white chrysanthemums. This bouquet is simple, fresh and suitable for many occasions.",
+        "price": "$34",
+        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=White+Chrysanthemums"
+    },
+    {
+        "id": 4,
+        "categoryId": "gift_bouquets",
+        "name": "White Roses Bouquet",
+        "shortDescription": "Elegant white roses for a clean look.",
+        "fullDescription": "A refined bouquet of white roses. It creates a calm and elegant impression and is perfect for gifts, celebrations and important events.",
+        "price": "$48",
+        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=White+Roses"
+    },
+
+    {
+        "id": 5,
+        "categoryId": "wedding_flowers",
+        "name": "Wedding Lilies",
+        "shortDescription": "Elegant lilies for wedding ceremonies.",
+        "fullDescription": "A wedding bouquet with fresh lilies. It looks graceful and luxurious, making it suitable for bridal bouquets and wedding decorations.",
+        "price": "$70",
+        "image": "https://placehold.co/900x600/f3d5df/5b3a46?text=Wedding+Lilies"
+    },
+    {
+        "id": 6,
+        "categoryId": "wedding_flowers",
+        "name": "Camellia Bouquet",
+        "shortDescription": "Romantic camellias for special events.",
+        "fullDescription": "A delicate camellia bouquet created for elegant celebrations. It adds tenderness and sophistication to a wedding style.",
+        "price": "$76",
+        "image": "https://placehold.co/900x600/f3d5df/5b3a46?text=Camellia"
+    },
+    {
+        "id": 7,
+        "categoryId": "wedding_flowers",
+        "name": "Eustoma Bouquet",
+        "shortDescription": "Soft eustoma flowers for a gentle look.",
+        "fullDescription": "A light bouquet with eustoma flowers. It is perfect for a romantic wedding, photo session or delicate floral decoration.",
+        "price": "$62",
+        "image": "https://placehold.co/900x600/f3d5df/5b3a46?text=Eustoma"
+    },
+    {
+        "id": 8,
+        "categoryId": "wedding_flowers",
+        "name": "Daisy Wedding Mix",
+        "shortDescription": "Simple daisies for a natural wedding style.",
+        "fullDescription": "A fresh bouquet with daisies and light greenery. It is ideal for rustic, summer or minimal wedding themes.",
+        "price": "$44",
+        "image": "https://placehold.co/900x600/f3d5df/5b3a46?text=Daisy+Mix"
+    },
+
+    {
+        "id": 9,
+        "categoryId": "seasonal_flowers",
+        "name": "Anemones",
+        "shortDescription": "Stylish anemones with expressive petals.",
+        "fullDescription": "A seasonal bouquet with anemones. These flowers look unusual and elegant, making them perfect for modern floral arrangements.",
+        "price": "$39",
+        "image": "https://placehold.co/900x600/fff0d9/5b3a46?text=Anemones"
+    },
+    {
+        "id": 10,
+        "categoryId": "seasonal_flowers",
+        "name": "Tulips",
+        "shortDescription": "Fresh tulips for spring mood.",
+        "fullDescription": "A colorful bouquet of fresh tulips. It is light, cheerful and perfect for spring gifts or home decoration.",
+        "price": "$33",
+        "image": "https://placehold.co/900x600/fff0d9/5b3a46?text=Tulips"
+    },
+    {
+        "id": 11,
+        "categoryId": "seasonal_flowers",
+        "name": "Ranunculus",
+        "shortDescription": "Delicate ranunculus flowers in soft shades.",
+        "fullDescription": "A bouquet with ranunculus flowers. Their layered petals create a romantic and elegant look for seasonal arrangements.",
+        "price": "$46",
+        "image": "https://placehold.co/900x600/fff0d9/5b3a46?text=Ranunculus"
+    },
+    {
+        "id": 12,
+        "categoryId": "seasonal_flowers",
+        "name": "Peonies",
+        "shortDescription": "Large soft peonies for a luxurious bouquet.",
+        "fullDescription": "A beautiful seasonal bouquet with peonies. These flowers look rich, soft and romantic, especially for spring and summer gifts.",
+        "price": "$58",
+        "image": "https://placehold.co/900x600/fff0d9/5b3a46?text=Peonies"
+    },
+
+    {
+        "id": 13,
+        "categoryId": "indoor_plants",
+        "name": "Cactus Set",
+        "shortDescription": "Small cactus plants for decoration.",
+        "fullDescription": "A cute set of cactus plants. They are easy to care for and perfect for desks, shelves and small home spaces.",
+        "price": "$22",
+        "image": "https://placehold.co/900x600/dff0e2/5b3a46?text=Cactus+Set"
+    },
+    {
+        "id": 14,
+        "categoryId": "indoor_plants",
+        "name": "Orchid Pot",
+        "shortDescription": "Elegant orchid in a decorative pot.",
+        "fullDescription": "A beautiful orchid in a pot. It is a long-lasting gift and a stylish decoration for a room, office or reception area.",
+        "price": "$42",
+        "image": "https://placehold.co/900x600/dff0e2/5b3a46?text=Orchid+Pot"
+    },
+    {
+        "id": 15,
+        "categoryId": "indoor_plants",
+        "name": "Fern",
+        "shortDescription": "Fresh green fern for natural interiors.",
+        "fullDescription": "A decorative indoor fern with soft green leaves. It adds freshness and a natural atmosphere to any interior.",
+        "price": "$27",
+        "image": "https://placehold.co/900x600/dff0e2/5b3a46?text=Fern"
+    },
+    {
+        "id": 16,
+        "categoryId": "indoor_plants",
+        "name": "Ficus",
+        "shortDescription": "Stylish ficus plant for home or office.",
+        "fullDescription": "A ficus plant with beautiful green leaves. It is suitable for home, office and modern interior decoration.",
+        "price": "$35",
+        "image": "https://placehold.co/900x600/dff0e2/5b3a46?text=Ficus"
+    },
+
+    {
+        "id": 17,
+        "categoryId": "gifts",
+        "name": "Cards and Envelopes",
+        "shortDescription": "Mini cards, wish cards and money envelopes.",
+        "fullDescription": "Author mini-cards with spring watercolor illustrations, cards for warm wishes and elegant envelopes for money gifts.",
+        "price": "$6",
+        "image": "https://placehold.co/900x600/e8def8/5b3a46?text=Cards+and+Envelopes"
+    },
+    {
+        "id": 18,
+        "categoryId": "gifts",
+        "name": "Home Fragrance",
+        "shortDescription": "Soy candles, diffusers and interior perfumes.",
+        "fullDescription": "Aesthetic soy candles in glass, reed diffusers with sticks and interior perfumes for creating a cozy atmosphere at home.",
+        "price": "$24",
+        "image": "https://placehold.co/900x600/e8def8/5b3a46?text=Home+Fragrance"
+    },
+    {
+        "id": 19,
+        "categoryId": "gifts",
+        "name": "Sweets Box",
+        "shortDescription": "Chocolate, macarons and premium candies.",
+        "fullDescription": "A sweet gift set with craft chocolate, colorful macarons, premium candy boxes or healthy nut pastes.",
+        "price": "$28",
+        "image": "https://placehold.co/900x600/e8def8/5b3a46?text=Sweets+Box"
+    },
+    {
+        "id": 20,
+        "categoryId": "gifts",
+        "name": "Stylish Vase",
+        "shortDescription": "Glass or ceramic vase for bouquets.",
+        "fullDescription": "A minimal glass or ceramic vase that perfectly matches flower bouquets and can become a stylish part of home decor.",
+        "price": "$31",
+        "image": "https://placehold.co/900x600/e8def8/5b3a46?text=Stylish+Vase"
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "id": "gift_bouquets",
+        "name": "Gift Bouquets",
+        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=Gift+Bouquets"
+    },
+    {
+        "id": "wedding_flowers",
+        "name": "Wedding Flowers",
+        "image": "https://placehold.co/900x600/f3d5df/5b3a46?text=Wedding+Flowers"
+    },
+    {
+        "id": "seasonal_flowers",
+        "name": "Seasonal Flowers",
+        "image": "https://placehold.co/900x600/fff0d9/5b3a46?text=Seasonal+Flowers"
+    },
+    {
+        "id": "indoor_plants",
+        "name": "Indoor Plants",
+        "image": "https://placehold.co/900x600/dff0e2/5b3a46?text=Indoor+Plants"
+    },
+    {
+        "id": "gifts",
+        "name": "Gifts",
+        "image": "https://placehold.co/900x600/e8def8/5b3a46?text=Gifts"
+    }
+]
