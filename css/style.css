@@ -633,3 +633,46 @@ footer {
         grid-template-columns: repeat(4, 1fr);
     }
 }
+
+/* Вставка Варі */
+/* Game Styles */
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-container {
+    position: relative;
+    width: 400px; /* Ширина гри */
+    height: 500px; /* Висота гри */
+    border: 8px solid #f3d5df;
+    border-radius: 30px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(180, 120, 130, 0.15);
+}
+
+#flowerGame {
+    display: block;
+    background: linear-gradient(#fff8f4, #fff);
+}
+
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.hidden {
+    display: none !important;
+}
+/* Закінчення вставки */
