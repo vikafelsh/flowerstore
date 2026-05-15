@@ -293,27 +293,19 @@ document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = t
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
 function spawnFlower() {
-    // ЛІМІТ: Не більше 5 квітів на екрані одночасно
-    if (flowers.length >= 5) return;
+    // ЛІМІТ: динамічне обмеження кількості квітів на екрані
+    const maxFlowersOnScreen = (score < 10) ? 3 : 5;
+    if (flowers.length >= maxFlowersOnScreen) return;
 
-    let speedMin, speedMax, spawnChance;
-
-    if (score < 10) {
-        // Легкий старт
-        speedMin = 1.5;
-        speedMax = 2.5;
-        spawnChance = 0.02; 
-    } else if (score < 20) {
-        // Середня складність
-        speedMin = 3;
-        speedMax = 5;
-        spawnChance = 0.04; 
-    } else {
-        // Максимальна складність
-        speedMin = 5;
-        speedMax = 8;
-        spawnChance = 0.06;
-    }
+    // ПЛАВНА ШВИДКІСТЬ: базовий мінімум 1.5, який зростає на 0.2 за кожну квітку
+    // Наприклад, на 10-й квітці швидкість буде від 2.5 до 4.5
+    let currentDifficulty = score * 0.2; 
+    let speedMin = 1.5 + currentDifficulty;
+    let speedMax = 3.0 + currentDifficulty;
+    
+    // Шанс появи також трохи зростає, але плавно
+    let spawnChance = 0.015 + (score * 0.001);
+    if (spawnChance > 0.05) spawnChance = 0.05; // Обмежуємо максимальну частоту
 
     if (Math.random() < spawnChance) {
         flowers.push({
@@ -342,6 +334,7 @@ function endGame() {
 function update() {
     if (!gameRunning) return;
 
+    // Плавний рух кошика
     if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
     if (keys.ArrowRight || keys.d) basket.x += basket.speed;
 
@@ -354,10 +347,16 @@ function update() {
         let f = flowers[i];
         f.y += f.speed;
 
-        if (f.y + f.size > basket.y && f.x + f.size > basket.x && f.x < basket.x + basket.width) {
+        // Перевірка зіткнення
+        if (f.y + f.size > basket.y && 
+            f.x + f.size > basket.x && 
+            f.x < basket.x + basket.width) {
+            
             flowers.splice(i, 1);
             score++;
-        } else if (f.y > canvas.height) {
+        } 
+        // Якщо пропустили квітку
+        else if (f.y > canvas.height) {
             endGame();
         }
     }
