@@ -261,11 +261,12 @@ function updateAccountNavbar() {
 }
 
 /* Вставка Варі */
-// --- Фінальна логіка Flower Game ---
-
+// --- Логіка Flower Game ---
 const canvas = document.getElementById('flowerGame');
 const ctx = canvas.getContext('2d');
+const startScreen = document.getElementById('game-start-screen');
 const gameOverScreen = document.getElementById('game-over-screen');
+const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
 const finalScoreText = document.getElementById('final-score');
 const discountInfoText = document.getElementById('discount-info');
@@ -292,39 +293,35 @@ document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = t
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
 function spawnFlower() {
+    // ЛІМІТ: Не більше 5 квітів на екрані одночасно
+    if (flowers.length >= 5) return;
+
     let speedMin, speedMax, spawnChance;
 
-    // Динаміка складності
     if (score < 10) {
-        // Початковий рівень: повільно, по одній
+        // Легкий старт
         speedMin = 1.5;
         speedMax = 2.5;
-        spawnChance = 0.015; 
+        spawnChance = 0.02; 
     } else if (score < 20) {
-        // Середній рівень: швидше, може з'являтись по декілька
+        // Середня складність
         speedMin = 3;
         speedMax = 5;
-        spawnChance = 0.03; 
+        spawnChance = 0.04; 
     } else {
-        // Складний рівень: швидкий темп
+        // Максимальна складність
         speedMin = 5;
         speedMax = 8;
-        spawnChance = 0.05;
+        spawnChance = 0.06;
     }
 
-    // Шанс появи нової квітки
     if (Math.random() < spawnChance) {
-        // Визначаємо, скільки квітів може з'явитись одночасно (до 3 після 10 очок)
-        let count = (score >= 10) ? Math.floor(Math.random() * 3) + 1 : 1;
-        
-        for (let i = 0; i < count; i++) {
-            flowers.push({
-                x: Math.random() * (canvas.width - 30),
-                y: -30 - (i * 40), // Щоб вони не злипалися, якщо їх декілька
-                size: 30,
-                speed: speedMin + Math.random() * (speedMax - speedMin)
-            });
-        }
+        flowers.push({
+            x: Math.random() * (canvas.width - 30),
+            y: -30,
+            size: 30,
+            speed: speedMin + Math.random() * (speedMax - speedMin)
+        });
     }
 }
 
@@ -351,7 +348,6 @@ function update() {
     if (basket.x < 0) basket.x = 0;
     if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
 
-    // Викликаємо нову логіку появи
     spawnFlower();
 
     for (let i = flowers.length - 1; i >= 0; i--) {
@@ -370,13 +366,11 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Кошик
     ctx.fillStyle = '#c96f8f';
     ctx.beginPath();
     ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
     ctx.fill();
 
-    // Квіти
     flowers.forEach(f => {
         ctx.fillStyle = '#f7dfe6';
         ctx.beginPath();
@@ -405,19 +399,26 @@ function startGame() {
     score = 0;
     flowers = [];
     basket.x = canvas.width / 2 - 40;
+    startScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     gameLoop();
 }
 
-// Автозапуск при вході в гру
-setInterval(() => {
-    const gameSection = document.getElementById('game');
-    if (gameSection?.classList.contains('active') && !gameRunning && gameOverScreen.classList.contains('hidden')) {
-        startGame();
-    }
-}, 500);
-
+// Призначаємо події кнопкам
+if (startBtn) startBtn.onclick = startGame;
 if (restartBtn) restartBtn.onclick = startGame;
+
+// Модифікуємо showSection, щоб при кожному переході на гру бачити Start Screen
+const originalShowSection = showSection;
+showSection = function(id) {
+    originalShowSection(id);
+    if (id === 'game') {
+        gameRunning = false;
+        startScreen.classList.remove('hidden');
+        gameOverScreen.classList.add('hidden');
+        draw(); 
+    }
+};
 
 draw();
 
