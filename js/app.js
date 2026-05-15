@@ -292,12 +292,40 @@ document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = t
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
 function spawnFlower() {
-    flowers.push({
-        x: Math.random() * (canvas.width - 30),
-        y: -30,
-        size: 30,
-        speed: 2 + Math.random() * 3
-    });
+    let speedMin, speedMax, spawnChance;
+
+    // Динаміка складності
+    if (score < 10) {
+        // Початковий рівень: повільно, по одній
+        speedMin = 1.5;
+        speedMax = 2.5;
+        spawnChance = 0.015; 
+    } else if (score < 20) {
+        // Середній рівень: швидше, може з'являтись по декілька
+        speedMin = 3;
+        speedMax = 5;
+        spawnChance = 0.03; 
+    } else {
+        // Складний рівень: швидкий темп
+        speedMin = 5;
+        speedMax = 8;
+        spawnChance = 0.05;
+    }
+
+    // Шанс появи нової квітки
+    if (Math.random() < spawnChance) {
+        // Визначаємо, скільки квітів може з'явитись одночасно (до 3 після 10 очок)
+        let count = (score >= 10) ? Math.floor(Math.random() * 3) + 1 : 1;
+        
+        for (let i = 0; i < count; i++) {
+            flowers.push({
+                x: Math.random() * (canvas.width - 30),
+                y: -30 - (i * 40), // Щоб вони не злипалися, якщо їх декілька
+                size: 30,
+                speed: speedMin + Math.random() * (speedMax - speedMin)
+            });
+        }
+    }
 }
 
 function endGame() {
@@ -323,13 +351,13 @@ function update() {
     if (basket.x < 0) basket.x = 0;
     if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
 
-    if (Math.random() < 0.02) spawnFlower();
+    // Викликаємо нову логіку появи
+    spawnFlower();
 
     for (let i = flowers.length - 1; i >= 0; i--) {
         let f = flowers[i];
         f.y += f.speed;
 
-        // Перевірка на зіткнення
         if (f.y + f.size > basket.y && f.x + f.size > basket.x && f.x < basket.x + basket.width) {
             flowers.splice(i, 1);
             score++;
