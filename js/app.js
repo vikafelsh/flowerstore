@@ -278,7 +278,6 @@ let score = 0;
 let flowers = [];
 let animationId;
 
-// Налаштування кошика
 let basket = {
     x: canvas.width / 2 - 40,
     y: canvas.height - 60,
@@ -298,30 +297,16 @@ function spawnFlower() {
         x: x,
         y: -30,
         size: 30,
-        speed: 2 + Math.random() * 2 // Випадкова швидкість падіння
+        speed: 2 + Math.random() * 2
     });
-}
-
-function startGame() {
-    gameRunning = true;
-    score = 0;
-    flowers = [];
-    basket.x = canvas.width / 2 - 40;
-    gameOverScreen.classList.add('hidden');
-    
-    // Очищуємо старі цикли, якщо вони були
-    cancelAnimationFrame(animationId);
-    gameLoop();
 }
 
 function endGame() {
     gameRunning = false;
     cancelAnimationFrame(animationId);
-    gameOverScreen.classList.remove('hidden');
+    if (gameOverScreen) gameOverScreen.classList.remove('hidden');
     
     finalScoreText.textContent = `Спіймано квітів: ${score}`;
-    
-    // Логіка знижки (наприклад, треба 15 для знижки)
     let goal = 15;
     if (score >= goal) {
         discountInfoText.textContent = "Вітаємо! Ви отримали знижку 10% за промокодом BLOOM10";
@@ -333,29 +318,24 @@ function endGame() {
 function update() {
     if (!gameRunning) return;
 
-    // Рух кошика
     if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
     if (keys.ArrowRight || keys.d) basket.x += basket.speed;
 
     if (basket.x < 0) basket.x = 0;
     if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
 
-    // Рух квітів
-    if (Math.random() < 0.02) spawnFlower(); // Шанс появи квітки кожний кадро
+    if (Math.random() < 0.02) spawnFlower();
 
     for (let i = flowers.length - 1; i >= 0; i--) {
         let f = flowers[i];
         f.y += f.speed;
 
-        // Перевірка на зіткнення з кошиком
         if (f.y + f.size > basket.y && 
             f.x + f.size > basket.x && 
             f.x < basket.x + basket.width) {
             flowers.splice(i, 1);
             score++;
-        } 
-        // Перевірка на промах (квітка впала нижче кошика)
-        else if (f.y > canvas.height) {
+        } else if (f.y > canvas.height) {
             endGame();
         }
     }
@@ -364,27 +344,22 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Малюємо кошик
     ctx.fillStyle = '#c96f8f';
     ctx.beginPath();
     ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
     ctx.fill();
 
-    // Малюємо квіти (поки що просто кружечки)
-    ctx.fillStyle = '#f7dfe6';
     flowers.forEach(f => {
+        ctx.fillStyle = '#f7dfe6';
         ctx.beginPath();
         ctx.arc(f.x + f.size/2, f.y + f.size/2, f.size/2, 0, Math.PI * 2);
         ctx.fill();
-        // Серцевина квітки
         ctx.fillStyle = '#ffcc00';
         ctx.beginPath();
         ctx.arc(f.x + f.size/2, f.y + f.size/2, 5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#f7dfe6'; // Повертаємо колір пелюсток
     });
 
-    // Рахунок на екрані
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 18px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 20, 30);
@@ -397,8 +372,37 @@ function gameLoop() {
     animationId = requestAnimationFrame(gameLoop);
 }
 
-// Слухач для кнопки
-if (restartBtn) {
-    restartBtn.addEventListener('click', startGame);
+function startGame() {
+    gameRunning = true;
+    score = 0;
+    flowers = [];
+    basket.x = canvas.width / 2 - basket.width / 2;
+    if (gameOverScreen) gameOverScreen.classList.add('hidden');
+    
+    cancelAnimationFrame(animationId);
+    gameLoop();
 }
+
+// Перевизначаємо showSection ПІСЛЯ того, як вона вже створена в основному коді
+if (typeof showSection !== 'undefined') {
+    const originalShowSection = showSection;
+    showSection = function(sectionId) {
+        originalShowSection(sectionId);
+        if (sectionId === 'game') {
+            startGame();
+        } else {
+            gameRunning = false;
+            cancelAnimationFrame(animationId);
+        }
+    };
+}
+
+if (restartBtn) {
+    restartBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        startGame();
+    });
+}
+
+draw(); // Малюємо порожнє поле з кошиком
 /* Закінчення вставки */
