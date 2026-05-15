@@ -259,3 +259,89 @@ function updateAccountNavbar() {
         userGreeting.textContent = "Welcome to Bloomora Flowers!";
     }
 }
+
+/* Вставка Варі */
+// --- Логіка Flower Game ---
+
+const canvas = document.getElementById('flowerGame');
+const ctx = canvas.getContext('2d');
+const gameOverScreen = document.getElementById('game-over-screen');
+const restartBtn = document.getElementById('restart-btn');
+
+// Налаштування розмірів (відповідно до CSS)
+canvas.width = 400;
+canvas.height = 500;
+
+let basket = {
+    x: canvas.width / 2 - 40,
+    y: canvas.height - 60,
+    width: 80,
+    height: 40,
+    speed: 7,
+    dx: 0
+};
+
+// Стан клавіш
+let keys = {
+    ArrowLeft: false,
+    ArrowRight: false,
+    a: false,
+    d: false
+};
+
+// Слухаємо натискання клавіш
+document.addEventListener('keydown', (e) => {
+    if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
+});
+
+document.addEventListener('keyup', (e) => {
+    if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
+});
+
+function drawBasket() {
+    ctx.fillStyle = '#c96f8f'; // Твій фірмовий колір
+    // Малюємо кошик з округленими кутами
+    ctx.beginPath();
+    ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
+    ctx.fill();
+}
+
+function update() {
+    // Рух вліво (A або Стрілка вліво)
+    if (keys.ArrowLeft || keys.a) {
+        basket.dx = -basket.speed;
+    } 
+    // Рух вправо (D або Стрілка вправо)
+    else if (keys.ArrowRight || keys.d) {
+        basket.dx = basket.speed;
+    } else {
+        basket.dx = 0;
+    }
+
+    basket.x += basket.dx;
+
+    // Обмеження, щоб кошик не виходив за краї
+    if (basket.x < 0) basket.x = 0;
+    if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    drawBasket();
+    update();
+
+    requestAnimationFrame(gameLoop);
+}
+
+// Запускаємо цикл гри
+gameLoop();
+
+// Тимчасово ховаємо екран програшу, щоб бачити гру
+function startGame() {
+    gameOverScreen.classList.add('hidden');
+    // Тут потім обнулимо рахунок
+}
+
+restartBtn.addEventListener('click', startGame);
+/* Закінчення вставки */
