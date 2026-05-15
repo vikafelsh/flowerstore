@@ -123,16 +123,28 @@
             </div>
         </section>
 
+        /* Вставка Варі */
         <section id="game" class="page-section">
-            <div class="placeholder-page">
-                <h2>Flower Game</h2>
-                <p>
-                    A small flower-themed arcade game will be available here.
-                </p>
-                <div class="coming-soon">Game Coming Soon</div>
+    <div class="game-wrapper">
+        <h2 class="section-title">Flower Game</h2>
+        <p class="section-subtitle">Лови квіти у кошик, щоб отримати знижку!</p>
+        
+        <div class="game-container">
+            <canvas id="flowerGame"></canvas>
+            
+            <div id="game-over-screen" class="hidden">
+                <h2 style="margin-bottom: 10px;">Гру закінчено!</h2>
+                <p id="final-score" style="font-size: 20px; color: #c96f8f; font-weight: 600;"></p>
+                <p id="discount-info" style="margin-bottom: 20px;"></p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button id="restart-btn" class="main-btn" style="font-size: 14px; padding: 10px 20px;">Спробувати ще раз</button>
+                    <button onclick="showSection('home')" class="back-btn" style="margin-bottom: 0;">Вийти</button>
+                </div>
             </div>
-        </section>
-
+        </div>
+    </div>
+</section>
+/* Закінчення вставки */
         <section id="about" class="page-section">
             <div class="info-page">
                 <h2>About Bloomora</h2>
