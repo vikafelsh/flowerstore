@@ -1,3 +1,6 @@
+console.log("APP.JS ПРАЦЮЄ!");
+alert("Скрипт завантажено");
+
 let categories = [];
 let products = [];
 let currentProducts = [];
