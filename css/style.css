@@ -656,6 +656,7 @@ footer {
 #flowerGame {
     display: block;
     background: linear-gradient(#fff8f4, #fff);
+    cursor: none;
 }
 
 #game-over-screen {
