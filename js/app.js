@@ -293,27 +293,62 @@ document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = t
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
 function spawnFlower() {
-    // ЛІМІТ: динамічне обмеження кількості квітів на екрані
     const maxFlowersOnScreen = (score < 10) ? 3 : 5;
     if (flowers.length >= maxFlowersOnScreen) return;
 
-    // ПЛАВНА ШВИДКІСТЬ: базовий мінімум 1.5, який зростає на 0.2 за кожну квітку
-    // Наприклад, на 10-й квітці швидкість буде від 2.5 до 4.5
-    let currentDifficulty = score * 0.2; 
-    let speedMin = 1.5 + currentDifficulty;
-    let speedMax = 3.0 + currentDifficulty;
-    
-    // Шанс появи також трохи зростає, але плавно
+    let speedMin = 1.8 + (score * 0.15);
+    let speedMax = 3.0 + (score * 0.2);
+
+    if (speedMax > 9) speedMax = 9;
+    if (speedMin > 6) speedMin = 6;
+
     let spawnChance = 0.015 + (score * 0.001);
-    if (spawnChance > 0.05) spawnChance = 0.05; // Обмежуємо максимальну частоту
+    if (spawnChance > 0.04) spawnChance = 0.04;
 
     if (Math.random() < spawnChance) {
+        // ВИПРАВЛЕНО: квіти з'являються з відступом від країв, щоб не вилітати за межі
+        const flowerSize = 30;
+        const margin = 10; 
         flowers.push({
-            x: Math.random() * (canvas.width - 30),
+            x: margin + Math.random() * (canvas.width - flowerSize - margin * 2),
             y: -30,
-            size: 30,
+            size: flowerSize,
             speed: speedMin + Math.random() * (speedMax - speedMin)
         });
+    }
+}
+
+function update() {
+    if (!gameRunning) return;
+
+    // Керування
+    if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
+    if (keys.ArrowRight || keys.d) basket.x += basket.speed;
+
+    // ВИПРАВЛЕНО: Жорсткі межі для кошика
+    if (basket.x < 0) {
+        basket.x = 0;
+    }
+    // Переконайся, що canvas.width у JS точно 400
+    if (basket.x + basket.width > canvas.width) {
+        basket.x = canvas.width - basket.width;
+    }
+
+    spawnFlower();
+
+    for (let i = flowers.length - 1; i >= 0; i--) {
+        let f = flowers[i];
+        f.y += f.speed;
+
+        // Колізія
+        if (f.y + f.size > basket.y && 
+            f.x + f.size > basket.x && 
+            f.x < basket.x + basket.width) {
+            flowers.splice(i, 1);
+            score++;
+        } else if (f.y > canvas.height) {
+            endGame();
+        }
     }
 }
 
@@ -328,37 +363,6 @@ function endGame() {
         discountInfoText.textContent = "Вітаємо! Ваша знижка 10%: BLOOM10";
     } else {
         discountInfoText.textContent = `До знижки не вистачило ${goal - score} шт.`;
-    }
-}
-
-function update() {
-    if (!gameRunning) return;
-
-    // Плавний рух кошика
-    if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
-    if (keys.ArrowRight || keys.d) basket.x += basket.speed;
-
-    if (basket.x < 0) basket.x = 0;
-    if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
-
-    spawnFlower();
-
-    for (let i = flowers.length - 1; i >= 0; i--) {
-        let f = flowers[i];
-        f.y += f.speed;
-
-        // Перевірка зіткнення
-        if (f.y + f.size > basket.y && 
-            f.x + f.size > basket.x && 
-            f.x < basket.x + basket.width) {
-            
-            flowers.splice(i, 1);
-            score++;
-        } 
-        // Якщо пропустили квітку
-        else if (f.y > canvas.height) {
-            endGame();
-        }
     }
 }
 
