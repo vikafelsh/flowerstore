@@ -704,4 +704,12 @@ footer {
 .hidden {
     display: none !important;
 }
+
+canvas {
+    display: block;
+    max-width: 100%; /* Щоб він не вилазив на мобільних */
+    height: auto;
+    background-color: #fff;
+    border-radius: 10px;
+}
 /* Закінчення вставки */
