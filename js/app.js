@@ -270,6 +270,7 @@ const restartBtn = document.getElementById('restart-btn');
 const finalScoreText = document.getElementById('final-score');
 const discountInfoText = document.getElementById('discount-info');
 
+// Встановлюємо розміри
 canvas.width = 400;
 canvas.height = 500;
 
@@ -344,11 +345,17 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+    // Кошик
     ctx.fillStyle = '#c96f8f';
     ctx.beginPath();
-    ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
+    if (ctx.roundRect) {
+        ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
+    } else {
+        ctx.rect(basket.x, basket.y, basket.width, basket.height);
+    }
     ctx.fill();
 
+    // Квіти
     flowers.forEach(f => {
         ctx.fillStyle = '#f7dfe6';
         ctx.beginPath();
@@ -360,6 +367,7 @@ function draw() {
         ctx.fill();
     });
 
+    // Рахунок
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 18px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 20, 30);
@@ -373,6 +381,7 @@ function gameLoop() {
 }
 
 function startGame() {
+    console.log("Гра запускається...");
     gameRunning = true;
     score = 0;
     flowers = [];
@@ -383,19 +392,14 @@ function startGame() {
     gameLoop();
 }
 
-// Перевизначаємо showSection ПІСЛЯ того, як вона вже створена в основному коді
-if (typeof showSection !== 'undefined') {
-    const originalShowSection = showSection;
-    showSection = function(sectionId) {
-        originalShowSection(sectionId);
-        if (sectionId === 'game') {
-            startGame();
-        } else {
-            gameRunning = false;
-            cancelAnimationFrame(animationId);
-        }
-    };
-}
+// ПЕРЕВІРКА АКТИВНОСТІ СЕКЦІЇ
+// Цей інтервал перевіряє, чи стала секція гри видимою
+setInterval(() => {
+    const gameSection = document.getElementById('game');
+    if (gameSection && gameSection.classList.contains('active') && !gameRunning && (!gameOverScreen || gameOverScreen.classList.contains('hidden'))) {
+        startGame();
+    }
+}, 500);
 
 if (restartBtn) {
     restartBtn.addEventListener('click', (e) => {
@@ -404,5 +408,6 @@ if (restartBtn) {
     });
 }
 
-draw(); // Малюємо порожнє поле з кошиком
+// Малюємо початковий стан відразу
+draw();
 /* Закінчення вставки */
