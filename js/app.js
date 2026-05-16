@@ -311,7 +311,7 @@ function spawnFlower() {
     const maxFlowersOnScreen = (score < 10) ? 3 : 5;
     framesSinceLastSpawn++;
 
-    if (flowers.length < maxFlowersOnScreen && framesSinceLastSpawn > 40) {
+    if (flowers.length < maxFlowersOnScreen && framesSinceLastSpawn > 45) {
         let spawnChance = 0.02 + (score * 0.002);
         if (spawnChance > 0.07) spawnChance = 0.07;
 
@@ -319,16 +319,32 @@ function spawnFlower() {
             let speedMin = 1.8 + (score * 0.15);
             let speedMax = 3.0 + (score * 0.2);
             if (speedMax > 8) speedMax = 8;
+            if (speedMin > 5) speedMin = 5;
 
-            const flowerSize = 55; // Було 35
-            const margin = 30; // Трохи збільшимо відступ, бо квітка стала більшою
+            // 1. Вибираємо випадкову картинку
+            const flowerImg = flowerImages[Math.floor(Math.random() * flowerImages.length)];
+            
+            // 2. Встановлюємо базову ширину (наприклад, 55 пікселів)
+            const targetWidth = 55; 
+            
+            // 3. Розраховуємо пропорційну висоту
+            // Якщо картинка ще не завантажилася повністю, використаємо 1:1 як запасний варіант
+            let targetHeight = targetWidth;
+            if (flowerImg.naturalHeight > 0) {
+                const aspectRatio = flowerImg.naturalWidth / flowerImg.naturalHeight;
+                targetHeight = targetWidth / aspectRatio;
+            }
 
+            const margin = 30;
+
+            // 4. Додаємо квітку в масив з новими параметрами ширини та висоти
             flowers.push({
-                x: margin + Math.random() * (canvas.width - flowerSize - margin * 2),
-                y: -50,
-                size: flowerSize,
+                x: margin + Math.random() * (canvas.width - targetWidth - margin * 2),
+                y: -targetHeight - 10, // Поява трохи вище екрана
+                width: targetWidth,
+                height: targetHeight,
                 speed: speedMin + Math.random() * (speedMax - speedMin),
-                img: flowerImages[Math.floor(Math.random() * flowerImages.length)]
+                img: flowerImg
             });
 
             framesSinceLastSpawn = 0;
@@ -377,31 +393,37 @@ function endGame() {
 }
 
 function draw() {
-    // 1. Малюємо фон замість очищення екрана
+    // 1. Малюємо фон (пейзаж)
     if (bgImg.complete) {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     } else {
-        // Якщо фон ще не завантажився, залишаємо ніжний колір
+        // Запасний фон, поки картинка вантажиться
         ctx.fillStyle = '#fffafc';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     
-    // 2. Малюємо кошик
+    // 2. Малюємо кошик (корзинку)
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 3. Малюємо квіти
+    // 3. Малюємо квіти з урахуванням їхніх індивідуальних пропорцій
     flowers.forEach(f => {
-        ctx.drawImage(f.img, f.x, f.y, f.size, f.size);
+        // ВАЖЛИВО: використовуємо f.width та f.height, які ми розрахували у spawnFlower
+        ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
-    // 4. Рахунок (додамо білу підкладку або тінь, щоб текст було видно на фоні)
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    ctx.fillRect(10, 10, 130, 35); // Невелика рамка під текст рахунку
+    // 4. Малюємо плашку рахунку
+    // Робимо її напівпрозорою та із заокругленими кутами
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.beginPath();
+    ctx.roundRect(10, 10, 140, 35, 10); 
+    ctx.fill();
     
+    // Текст рахунку
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
-    ctx.fillText(`Рахунок: ${score}`, 20, 35);
+    ctx.fillText(`Рахунок: ${score}`, 25, 35);
 }
+
 function gameLoop() {
     if (!gameRunning) return;
     update();
