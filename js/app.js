@@ -377,22 +377,31 @@ function endGame() {
 }
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 1. Малюємо фон замість очищення екрана
+    if (bgImg.complete) {
+        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    } else {
+        // Якщо фон ще не завантажився, залишаємо ніжний колір
+        ctx.fillStyle = '#fffafc';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
     
-    // МАЛЮЄМО КОШИК (Картинка)
+    // 2. Малюємо кошик
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // МАЛЮЄМО КВІТИ (Картинки)
+    // 3. Малюємо квіти
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.size, f.size);
     });
 
-    // Рахунок
+    // 4. Рахунок (додамо білу підкладку або тінь, щоб текст було видно на фоні)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.fillRect(10, 10, 130, 35); // Невелика рамка під текст рахунку
+    
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 20, 35);
 }
-
 function gameLoop() {
     if (!gameRunning) return;
     update();
