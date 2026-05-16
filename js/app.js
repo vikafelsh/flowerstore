@@ -318,21 +318,55 @@ function spawnFlower() {
     }
 }
 
+let framesSinceLastSpawn = 0;
+
+function spawnFlower() {
+    // 1. Динамічний ліміт кількості квітів на екрані
+    const maxFlowersOnScreen = (score < 10) ? 3 : 5;
+    
+    // Збільшуємо лічильник кадрів
+    framesSinceLastSpawn++;
+
+    // Перевіряємо умови:
+    // - Квітів на екрані менше ліміту
+    // - Пройшло достатньо часу (мінімум 40 кадрів ≈ 0.7 сек)
+    if (flowers.length < maxFlowersOnScreen && framesSinceLastSpawn > 40) {
+        
+        let spawnChance = 0.02 + (score * 0.002);
+        if (spawnChance > 0.07) spawnChance = 0.07;
+
+        if (Math.random() < spawnChance) {
+            let speedMin = 1.8 + (score * 0.15);
+            let speedMax = 3.0 + (score * 0.2);
+
+            if (speedMax > 8) speedMax = 8;
+            if (speedMin > 5) speedMin = 5;
+
+            const flowerSize = 30;
+            const margin = 20; // Збільшений відступ від країв
+
+            flowers.push({
+                x: margin + Math.random() * (canvas.width - flowerSize - margin * 2),
+                y: -30,
+                size: flowerSize,
+                speed: speedMin + Math.random() * (speedMax - speedMin)
+            });
+
+            // СКИДАЄМО ТАЙМЕР після появи квітки
+            framesSinceLastSpawn = 0;
+        }
+    }
+}
+
 function update() {
     if (!gameRunning) return;
 
-    // Керування
     if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
     if (keys.ArrowRight || keys.d) basket.x += basket.speed;
 
-    // ВИПРАВЛЕНО: Жорсткі межі для кошика
-    if (basket.x < 0) {
-        basket.x = 0;
-    }
-    // Переконайся, що canvas.width у JS точно 400
-    if (basket.x + basket.width > canvas.width) {
-        basket.x = canvas.width - basket.width;
-    }
+    // Жорсткі межі (тепер кошик точно не вийде за межі 400px)
+    if (basket.x < 0) basket.x = 0;
+    if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
 
     spawnFlower();
 
@@ -340,7 +374,6 @@ function update() {
         let f = flowers[i];
         f.y += f.speed;
 
-        // Колізія
         if (f.y + f.size > basket.y && 
             f.x + f.size > basket.x && 
             f.x < basket.x + basket.width) {
@@ -401,7 +434,8 @@ function startGame() {
     gameRunning = true;
     score = 0;
     flowers = [];
-    basket.x = canvas.width / 2 - 40;
+    framesSinceLastSpawn = 0; // Скидання тут
+    basket.x = canvas.width / 2 - basket.width / 2;
     startScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     gameLoop();
