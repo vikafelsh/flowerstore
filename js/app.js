@@ -262,6 +262,9 @@ function updateAccountNavbar() {
 
 /* Вставка Варі */
 // 1. ЗАВАНТАЖЕННЯ ЗОБРАЖЕНЬ
+const bgImg = new Image();
+bgImg.src = 'assets/background.png';
+
 const basketImg = new Image();
 basketImg.src = 'assets/basket.png'; // Переконайся, що файл тут
 
