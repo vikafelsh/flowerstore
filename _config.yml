@@ -1,0 +1,3 @@
+# Налаштування для Jekyll
+include: [assets]
+exclude: [_site, .sass-cache, .jekyll-cache, .jekyll-metadata]
