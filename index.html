@@ -112,16 +112,110 @@
     </div>
 </section>
 
-        <section id="custom" class="page-section">
-            <div class="placeholder-page">
-                <h2>Custom Bouquet</h2>
-                <p>
-                    This section will allow users to create their own bouquet
-                    by choosing flowers, colors and packaging.
-                </p>
-                <div class="coming-soon">Coming Soon</div>
+<section id="custom" class="page-section">
+            <h2 class="section-title">Власний букет</h2>
+            <p class="section-subtitle">
+                Оберіть оформлення, додайте квіти потрібного кольору та створіть власну композицію.
+            </p>
+    
+            <div id="wrappingStep" class="custom-step">
+                <h3 class="custom-step-title">Крок 1: оберіть оформлення</h3>
+    
+                <div id="wrappingOptions" class="wrapping-options"></div>
+    
+                <button id="startBuilderBtn" class="main-btn builder-start-btn" disabled>
+                    Перейти до створення букета
+                </button>
             </div>
+    
+            <div id="builderStep" class="custom-builder hidden">
+                <div class="flowers-panel">
+                    <h3>Квіти</h3>
+                    <p class="builder-help-text">
+                        Оберіть квітку, а потім натисніть на потрібний колір.
+                    </p>
+                    <div id="customFlowersList" class="custom-flowers-list"></div>
+                </div>
+    
+                <div class="bouquet-stage-wrapper">
+                    <h3>Ваш букет</h3>
+    
+                    <div id="bouquetStage" class="bouquet-stage">
+                        <div class="flowers-area">
+                            <div id="flowersLayer" class="flowers-layer"></div>
+                        </div>
+    
+                        <div class="wrapping-shape">
+                            <img id="selectedWrappingImage" src="" alt="Обране оформлення">
+                        </div>
+                    </div>
+    
+                    <div class="builder-controls">
+                        <button onclick="rotateSelectedFlower(-15)">Повернути вліво</button>
+                        <button onclick="rotateSelectedFlower(15)">Повернути вправо</button>
+                        <button onclick="resizeSelectedFlower(10)">Збільшити</button>
+                        <button onclick="resizeSelectedFlower(-10)">Зменшити</button>
+                        <button onclick="deleteSelectedFlower()">Видалити</button>
+                        <button onclick="clearBouquet()">Очистити</button>
+                    </div>
+                </div>
+    
+                <div class="bouquet-summary">
+                    <h3>Підсумок</h3>
+                    <div id="selectedFlowersSummary"></div>
+                    <p class="total-price">Разом: <span id="bouquetTotal">$0</span></p>
+                    <button class="buy-btn" onclick="finishBouquet()">Завершити букет</button>
+                </div>
+            </div>
+    
+            <div id="finalBouquetBox" class="final-bouquet-box hidden"></div>
         </section>
+        <section id="bouquetResultSection" class="page-section bouquet-result-section">
+        <div class="bouquet-result-card">
+            <h2>Ваш букет готовий!</h2>
+            <p class="result-subtitle">Перевірте свій вибір перед завершенням.</p>
+    
+            <div class="result-content">
+                <div class="result-preview">
+                    <h3>Попередній перегляд</h3>
+    
+                    <div class="result-bouquet-stage">
+                        <div id="resultBouquetPreview" class="result-bouquet-preview"></div>
+                    </div>
+                </div>
+    
+                <div class="result-info">
+                    <h3>Деталі букета</h3>
+    
+                    <p id="resultWrappingText">
+                        <strong>Оформлення:</strong>
+                    </p>
+    
+                    <div>
+                        <strong>Склад букета:</strong>
+                        <ul id="resultFlowersList" class="result-flowers-list"></ul>
+                    </div>
+    
+                    <p id="resultTotalPrice" class="result-total-price"></p>
+    
+                    <div class="satisfaction-box">
+                        <h3>Ви задоволені своїм вибором?</h3>
+                        <p>Можете повернутися до редагування або зберегти готовий букет.</p>
+                    </div>
+    
+                    <div class="result-buttons">
+                        <button onclick="backToWrapping()">Змінити оформлення</button>
+                        <button onclick="backToFlowers()">Змінити квіти</button>
+                        <button onclick="backToArrangement()">Змінити розташування</button>
+                        <button onclick="createRandomBouquet()">Створити випадковий букет</button>
+                        <button onclick="saveBouquetDesign()" class="confirm-result-btn">Зберегти букет</button>
+                    </div>
+    
+                    <p id="saveBouquetMessage" class="save-bouquet-message"></p>
+                </div>
+            </div>
+        </div>
+    </section>
         
         <section id="game" class="page-section">
     <div class="game-wrapper">
