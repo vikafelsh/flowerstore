@@ -1,0 +1,110 @@
+[
+    {
+        "id": "kraft_paper",
+        "name": "Крафтовий папір",
+        "type": "Матове натуральне пакування",
+        "price": 5,
+        "image": "assets/wrapping/craft.png",
+        "variations": [
+            {
+                "id": "natural",
+                "name": "Натуральний",
+                "image": "assets/wrapping/craft_craft.png",
+                "builderImage": "assets/wrapping/craft_craft.png"
+            },
+            {
+                "id": "pink",
+                "name": "Рожевий",
+                "image": "assets/wrapping/pink_craft.png",
+                "builderImage": "assets/wrapping/pink_craft.png"
+            },
+            {
+                "id": "black",
+                "name": "Чорний",
+                "image": "assets/wrapping/black_craft.png",
+                "builderImage": "assets/wrapping/black_craft.png"
+            }
+        ]
+    },
+    {
+        "id": "classic_paper",
+        "name": "Звичайний папір",
+        "type": "Класичне паперове оформлення",
+        "price": 6,
+        "image": "assets/wrapping/paper.png",
+        "variations": [
+            {
+                "id": "white",
+                "name": "Білий",
+                "image": "assets/wrapping/white_paper.png",
+                "builderImage": "assets/wrapping/white_paper.png"
+            },
+            {
+                "id": "blue",
+                "name": "Блакитний",
+                "image": "assets/wrapping/blue_paper.png",
+                "builderImage": "assets/wrapping/blue_paper.png"
+            },
+            {
+                "id": "lavender",
+                "name": "Лавандовий",
+                "image": "assets/wrapping/lavand_paper.png",
+                "builderImage": "assets/wrapping/lavand_paper.png"
+            }
+        ]
+    },
+    {
+        "id": "cellophane",
+        "name": "Целофан",
+        "type": "Прозоре або кольорове оформлення",
+        "price": 4,
+        "image": "assets/wrapping/cellophane.png",
+        "variations": [
+            {
+                "id": "transparent",
+                "name": "Прозорий",
+                "image": "assets/wrapping/white_cellophane.png",
+                "builderImage": "assets/wrapping/white_cellophane.png"
+            },
+            {
+                "id": "pink",
+                "name": "Рожевий",
+                "image": "assets/wrapping/pink_cellophane.png",
+                "builderImage": "assets/wrapping/pink_cellophane.png"
+            },
+            {
+                "id": "blue",
+                "name": "Блакитний",
+                "image": "assets/wrapping/blue_cellophane.png",
+                "builderImage": "assets/wrapping/blue_cellophane.png"
+            }
+        ]
+    },
+    {
+        "id": "fabric_wrap",
+        "name": "Тканинне оформлення",
+        "type": "М’яке декоративне пакування",
+        "price": 8,
+        "image": "assets/wrapping/fabric.png",
+        "variations": [
+            {
+                "id": "cream",
+                "name": "Кремове",
+                "image": "assets/wrapping/cream_fabric.png",
+                "builderImage": "assets/wrapping/cream_fabric.png"
+            },
+            {
+                "id": "rose",
+                "name": "Пудрове",
+                "image": "assets/wrapping/pink_fabric.png",
+                "builderImage": "assets/wrapping/pink_fabric.png"
+            },
+            {
+                "id": "green",
+                "name": "Оливкове",
+                "image": "assets/wrapping/olive_fabric.png",
+                "builderImage": "assets/wrapping/olive_fabric.png"
+            }
+        ]
+    }
+]
