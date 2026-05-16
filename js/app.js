@@ -292,10 +292,10 @@ let animationId;
 let framesSinceLastSpawn = 0;
 
 let basket = {
-    x: canvas.width / 2 - 40,
-    y: canvas.height - 70, // Трохи підняв, щоб картинка влізла
-    width: 80,
-    height: 60, // Висота під картинку кошика
+    x: canvas.width / 2 - 60, // Центруємо з урахуванням нової ширини
+    y: canvas.height - 80,
+    width: 120, // Було 80
+    height: 90, // Було 60
     speed: 8
 };
 
@@ -317,15 +317,14 @@ function spawnFlower() {
             let speedMax = 3.0 + (score * 0.2);
             if (speedMax > 8) speedMax = 8;
 
-            const flowerSize = 35; // Трохи збільшив для видимості картинки
-            const margin = 20;
+            const flowerSize = 55; // Було 35
+            const margin = 30; // Трохи збільшимо відступ, бо квітка стала більшою
 
             flowers.push({
                 x: margin + Math.random() * (canvas.width - flowerSize - margin * 2),
-                y: -40,
+                y: -50,
                 size: flowerSize,
                 speed: speedMin + Math.random() * (speedMax - speedMin),
-                // Випадкова картинка з масиву
                 img: flowerImages[Math.floor(Math.random() * flowerImages.length)]
             });
 
