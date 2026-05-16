@@ -268,7 +268,7 @@ bgImg.src = 'assets/background.jpg';
 const basketImg = new Image();
 basketImg.src = 'assets/basket.png'; // Переконайся, що файл тут
 
-const flowerFiles = ['flower1.png', 'flower2.png', 'flower3.png'];
+const flowerFiles = ['flower1.1.png', 'flower1.2.png', 'flower1.3.png', 'flower2.1.png', 'flower2.2.png', 'flower2.3.png', 'flower3.1.png', 'flower3.2.png', 'flower3.3.png'];
 const flowerImages = flowerFiles.map(file => {
     const img = new Image();
     img.src = `assets/${file}`;
