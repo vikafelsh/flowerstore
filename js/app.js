@@ -261,7 +261,18 @@ function updateAccountNavbar() {
 }
 
 /* Вставка Варі */
-// --- Логіка Flower Game ---
+// 1. ЗАВАНТАЖЕННЯ ЗОБРАЖЕНЬ
+const basketImg = new Image();
+basketImg.src = 'assets/basket.png'; // Переконайся, що файл тут
+
+const flowerFiles = ['flower1.png', 'flower2.png', 'flower3.png'];
+const flowerImages = flowerFiles.map(file => {
+    const img = new Image();
+    img.src = `assets/${file}`;
+    return img;
+});
+
+// Елементи інтерфейсу
 const canvas = document.getElementById('flowerGame');
 const ctx = canvas.getContext('2d');
 const startScreen = document.getElementById('game-start-screen');
@@ -278,12 +289,13 @@ let gameRunning = false;
 let score = 0;
 let flowers = [];
 let animationId;
+let framesSinceLastSpawn = 0;
 
 let basket = {
     x: canvas.width / 2 - 40,
-    y: canvas.height - 60,
+    y: canvas.height - 70, // Трохи підняв, щоб картинка влізла
     width: 80,
-    height: 40,
+    height: 60, // Висота під картинку кошика
     speed: 8
 };
 
@@ -294,65 +306,29 @@ document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = fal
 
 function spawnFlower() {
     const maxFlowersOnScreen = (score < 10) ? 3 : 5;
-    if (flowers.length >= maxFlowersOnScreen) return;
-
-    let speedMin = 1.8 + (score * 0.15);
-    let speedMax = 3.0 + (score * 0.2);
-
-    if (speedMax > 9) speedMax = 9;
-    if (speedMin > 6) speedMin = 6;
-
-    let spawnChance = 0.015 + (score * 0.001);
-    if (spawnChance > 0.04) spawnChance = 0.04;
-
-    if (Math.random() < spawnChance) {
-        // ВИПРАВЛЕНО: квіти з'являються з відступом від країв, щоб не вилітати за межі
-        const flowerSize = 30;
-        const margin = 10; 
-        flowers.push({
-            x: margin + Math.random() * (canvas.width - flowerSize - margin * 2),
-            y: -30,
-            size: flowerSize,
-            speed: speedMin + Math.random() * (speedMax - speedMin)
-        });
-    }
-}
-
-let framesSinceLastSpawn = 0;
-
-function spawnFlower() {
-    // 1. Динамічний ліміт кількості квітів на екрані
-    const maxFlowersOnScreen = (score < 10) ? 3 : 5;
-    
-    // Збільшуємо лічильник кадрів
     framesSinceLastSpawn++;
 
-    // Перевіряємо умови:
-    // - Квітів на екрані менше ліміту
-    // - Пройшло достатньо часу (мінімум 40 кадрів ≈ 0.7 сек)
     if (flowers.length < maxFlowersOnScreen && framesSinceLastSpawn > 40) {
-        
         let spawnChance = 0.02 + (score * 0.002);
         if (spawnChance > 0.07) spawnChance = 0.07;
 
         if (Math.random() < spawnChance) {
             let speedMin = 1.8 + (score * 0.15);
             let speedMax = 3.0 + (score * 0.2);
-
             if (speedMax > 8) speedMax = 8;
-            if (speedMin > 5) speedMin = 5;
 
-            const flowerSize = 30;
-            const margin = 20; // Збільшений відступ від країв
+            const flowerSize = 35; // Трохи збільшив для видимості картинки
+            const margin = 20;
 
             flowers.push({
                 x: margin + Math.random() * (canvas.width - flowerSize - margin * 2),
-                y: -30,
+                y: -40,
                 size: flowerSize,
-                speed: speedMin + Math.random() * (speedMax - speedMin)
+                speed: speedMin + Math.random() * (speedMax - speedMin),
+                // Випадкова картинка з масиву
+                img: flowerImages[Math.floor(Math.random() * flowerImages.length)]
             });
 
-            // СКИДАЄМО ТАЙМЕР після появи квітки
             framesSinceLastSpawn = 0;
         }
     }
@@ -364,7 +340,6 @@ function update() {
     if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
     if (keys.ArrowRight || keys.d) basket.x += basket.speed;
 
-    // Жорсткі межі (тепер кошик точно не вийде за межі 400px)
     if (basket.x < 0) basket.x = 0;
     if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
 
@@ -374,7 +349,7 @@ function update() {
         let f = flowers[i];
         f.y += f.speed;
 
-        if (f.y + f.size > basket.y && 
+        if (f.y + f.size > basket.y + 10 && // +10 щоб квітка залітала "всередину" кошика
             f.x + f.size > basket.x && 
             f.x < basket.x + basket.width) {
             flowers.splice(i, 1);
@@ -389,8 +364,8 @@ function endGame() {
     gameRunning = false;
     cancelAnimationFrame(animationId);
     gameOverScreen.classList.remove('hidden');
-    
     finalScoreText.textContent = `Спіймано квітів: ${score}`;
+    
     let goal = 15;
     if (score >= goal) {
         discountInfoText.textContent = "Вітаємо! Ваша знижка 10%: BLOOM10";
@@ -402,25 +377,18 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    ctx.fillStyle = '#c96f8f';
-    ctx.beginPath();
-    ctx.roundRect(basket.x, basket.y, basket.width, basket.height, 10);
-    ctx.fill();
+    // МАЛЮЄМО КОШИК (Картинка)
+    ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
+    // МАЛЮЄМО КВІТИ (Картинки)
     flowers.forEach(f => {
-        ctx.fillStyle = '#f7dfe6';
-        ctx.beginPath();
-        ctx.arc(f.x + f.size/2, f.y + f.size/2, f.size/2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#ffcc00';
-        ctx.beginPath();
-        ctx.arc(f.x + f.size/2, f.y + f.size/2, 5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.drawImage(f.img, f.x, f.y, f.size, f.size);
     });
 
+    // Рахунок
     ctx.fillStyle = '#5b3a46';
-    ctx.font = 'bold 18px Poppins';
-    ctx.fillText(`Рахунок: ${score}`, 20, 30);
+    ctx.font = 'bold 20px Poppins';
+    ctx.fillText(`Рахунок: ${score}`, 20, 35);
 }
 
 function gameLoop() {
@@ -434,18 +402,16 @@ function startGame() {
     gameRunning = true;
     score = 0;
     flowers = [];
-    framesSinceLastSpawn = 0; // Скидання тут
+    framesSinceLastSpawn = 0;
     basket.x = canvas.width / 2 - basket.width / 2;
     startScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     gameLoop();
 }
 
-// Призначаємо події кнопкам
 if (startBtn) startBtn.onclick = startGame;
 if (restartBtn) restartBtn.onclick = startGame;
 
-// Модифікуємо showSection, щоб при кожному переході на гру бачити Start Screen
 const originalShowSection = showSection;
 showSection = function(id) {
     originalShowSection(id);
@@ -457,6 +423,6 @@ showSection = function(id) {
     }
 };
 
-draw();
-
+// Малюємо початковий кадр після завантаження картинки кошика
+basketImg.onload = () => draw();
 /* Закінчення вставки */
