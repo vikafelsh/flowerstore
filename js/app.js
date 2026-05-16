@@ -266,9 +266,13 @@ const bgImg = new Image();
 bgImg.src = 'assets/background.jpg';
 
 const basketImg = new Image();
-basketImg.src = 'assets/basket.png'; // Переконайся, що файл тут
+basketImg.src = 'assets/basket.png';
 
-const flowerFiles = ['flower1.1.png', 'flower1.2.png', 'flower1.3.png', 'flower2.1.png', 'flower2.2.png', 'flower2.3.png', 'flower3.1.png', 'flower3.2.png', 'flower3.3.png'];
+const flowerFiles = [
+    'flower1.1.png', 'flower1.2.png', 'flower1.3.png', 
+    'flower2.1.png', 'flower2.2.png', 'flower2.3.png', 
+    'flower3.1.png', 'flower3.2.png', 'flower3.3.png'
+];
 const flowerImages = flowerFiles.map(file => {
     const img = new Image();
     img.src = `assets/${file}`;
@@ -295,11 +299,11 @@ let animationId;
 let framesSinceLastSpawn = 0;
 
 let basket = {
-    x: canvas.width / 2 - 60, // Центруємо з урахуванням нової ширини
+    x: canvas.width / 2 - 60,
     y: canvas.height - 80,
-    width: 120, // Було 80
-    height: 90, // Було 60
-    speed: 8
+    width: 120,
+    height: 90,
+    speed: 9
 };
 
 let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
@@ -321,14 +325,9 @@ function spawnFlower() {
             if (speedMax > 8) speedMax = 8;
             if (speedMin > 5) speedMin = 5;
 
-            // 1. Вибираємо випадкову картинку
             const flowerImg = flowerImages[Math.floor(Math.random() * flowerImages.length)];
-            
-            // 2. Встановлюємо базову ширину (наприклад, 55 пікселів)
             const targetWidth = 55; 
             
-            // 3. Розраховуємо пропорційну висоту
-            // Якщо картинка ще не завантажилася повністю, використаємо 1:1 як запасний варіант
             let targetHeight = targetWidth;
             if (flowerImg.naturalHeight > 0) {
                 const aspectRatio = flowerImg.naturalWidth / flowerImg.naturalHeight;
@@ -337,10 +336,9 @@ function spawnFlower() {
 
             const margin = 30;
 
-            // 4. Додаємо квітку в масив з новими параметрами ширини та висоти
             flowers.push({
                 x: margin + Math.random() * (canvas.width - targetWidth - margin * 2),
-                y: -targetHeight - 10, // Поява трохи вище екрана
+                y: -targetHeight - 10,
                 width: targetWidth,
                 height: targetHeight,
                 speed: speedMin + Math.random() * (speedMax - speedMin),
@@ -367,12 +365,19 @@ function update() {
         let f = flowers[i];
         f.y += f.speed;
 
-        if (f.y + f.size > basket.y + 10 && // +10 щоб квітка залітала "всередину" кошика
-            f.x + f.size > basket.x && 
+        // ВИПРАВЛЕНА ЛОГІКА ЗІТКНЕННЯ
+        // Тепер використовуємо f.width та f.height замість f.size
+        if (f.y + f.height > basket.y + 20 && 
+            f.x + f.width > basket.x && 
             f.x < basket.x + basket.width) {
-            flowers.splice(i, 1);
-            score++;
-        } else if (f.y > canvas.height) {
+            
+            // Якщо квітка перетнула лінію кошика
+            if (f.y < basket.y + basket.height) {
+                flowers.splice(i, 1);
+                score++;
+            }
+        } 
+        else if (f.y > canvas.height) {
             endGame();
         }
     }
@@ -393,32 +398,26 @@ function endGame() {
 }
 
 function draw() {
-    // 1. Малюємо фон (пейзаж)
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     if (bgImg.complete) {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     } else {
-        // Запасний фон, поки картинка вантажиться
         ctx.fillStyle = '#fffafc';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     
-    // 2. Малюємо кошик (корзинку)
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 3. Малюємо квіти з урахуванням їхніх індивідуальних пропорцій
     flowers.forEach(f => {
-        // ВАЖЛИВО: використовуємо f.width та f.height, які ми розрахували у spawnFlower
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
-    // 4. Малюємо плашку рахунку
-    // Робимо її напівпрозорою та із заокругленими кутами
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
     ctx.fill();
     
-    // Текст рахунку
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 25, 35);
@@ -447,7 +446,7 @@ if (restartBtn) restartBtn.onclick = startGame;
 
 const originalShowSection = showSection;
 showSection = function(id) {
-    originalShowSection(id);
+    if (typeof originalShowSection === 'function') originalShowSection(id);
     if (id === 'game') {
         gameRunning = false;
         startScreen.classList.remove('hidden');
@@ -456,6 +455,6 @@ showSection = function(id) {
     }
 };
 
-// Малюємо початковий кадр після завантаження картинки кошика
 basketImg.onload = () => draw();
+bgImg.onload = () => draw();
 /* Закінчення вставки */
