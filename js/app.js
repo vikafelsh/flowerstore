@@ -303,10 +303,7 @@ let basket = {
     y: canvas.height - 80,
     width: 120,
     height: 90,
-    maxSpeed: 10,       // Максимальна швидкість ковзання
-    currentSpeed: 0,    // Поточна швидкість (змінюється кодом)
-    acceleration: 0.9,  // Сила розгону
-    friction: 0.88      // Сила гальмування (чим менше число, тим швидше зупиняється)
+    speed: 10 // Фіксована швидкість для миттєвого руху
 };
 
 let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
@@ -356,56 +353,34 @@ function spawnFlower() {
     function update() {
     if (!gameRunning) return;
 
-    // 1. ПЛАВНИЙ РУХ ТА ІНЕРЦІЯ
+    // Чітке керування без інерції
     if (keys.ArrowLeft || keys.a) {
-        // Поступовий розгін вліво
-        basket.currentSpeed -= basket.acceleration;
+        basket.x -= basket.speed;
     } else if (keys.ArrowRight || keys.d) {
-        // Поступовий розгін вправо
-        basket.currentSpeed += basket.acceleration;
-    } else {
-        // Ефект тертя: швидкість поступово падає до 0, коли кнопки відпущені
-        basket.currentSpeed *= basket.friction;
+        basket.x += basket.speed;
     }
 
-    // Обмеження максимальної швидкості (щоб кошик не розігнався до безкінечності)
-    if (basket.currentSpeed > basket.maxSpeed) basket.currentSpeed = basket.maxSpeed;
-    if (basket.currentSpeed < -basket.maxSpeed) basket.currentSpeed = -basket.maxSpeed;
-
-    // Оновлення позиції x на основі розрахованої швидкості
-    basket.x += basket.currentSpeed;
-
-    // 2. ЖОРСТКІ МЕЖІ ЕКРАНА
-    if (basket.x < 0) {
-        basket.x = 0;
-        basket.currentSpeed = 0; // Зупиняємо швидкість при ударі об стінку
-    }
-    if (basket.x > canvas.width - basket.width) {
-        basket.x = canvas.width - basket.width;
-        basket.currentSpeed = 0;
-    }
+    // Жорсткі межі екрана
+    if (basket.x < 0) basket.x = 0;
+    if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
 
     spawnFlower();
 
-    // 3. ЛОГІКА КВІТІВ ТА ПЕРЕВІРКА ЗІТКНЕНЬ
+    // Логіка зіткнень (залишаємо без змін, вона працює добре)
     for (let i = flowers.length - 1; i >= 0; i--) {
         let f = flowers[i];
         f.y += f.speed;
 
-        // Визначаємо точки для точного Hitbox
         const flowerCenterX = f.x + f.width / 2;
         const flowerBottomY = f.y + f.height;
-
-        // Активна зона всередині кошика (вужча за картинку для реалізму)
         const basketActiveLeft = basket.x + 25; 
         const basketActiveRight = basket.x + basket.width - 25;
-        const basketTop = basket.y + 30; // Квітка має залетіти трохи глибше
+        const basketTop = basket.y + 30;
 
         if (flowerBottomY > basketTop && 
             flowerCenterX > basketActiveLeft && 
             flowerCenterX < basketActiveRight) {
             
-            // Перевіряємо занурення (щоб не зловити квітку під дном кошика)
             if (f.y < basket.y + basket.height) {
                 flowers.splice(i, 1);
                 score++;
