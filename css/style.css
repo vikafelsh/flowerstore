@@ -1352,3 +1352,159 @@ footer {
 .clear-account-btn:hover {
     background: #e9bdcd !important;
 }
+
+/* Better navbar responsive */
+@media (max-width: 900px) {
+    .navbar {
+        flex-wrap: wrap;
+        padding: 16px 6%;
+    }
+
+    .brand {
+        font-size: 30px;
+    }
+
+    .hamburger {
+        display: block;
+        margin-left: auto;
+    }
+
+    .nav-menu {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 0 8px;
+        order: 3;
+    }
+
+    .nav-menu.show {
+        display: flex;
+    }
+
+    .nav-menu a {
+        font-size: 18px;
+    }
+
+    .account-box {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+}
+
+/* Catalog cards fix for tablets */
+@media (max-width: 900px) {
+    .categories-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .category-card {
+        height: 220px;
+    }
+
+    .category-card h3 {
+        font-size: 30px;
+        line-height: 1.1;
+    }
+}
+
+/* Small screens */
+@media (max-width: 575px) {
+    .navbar {
+        padding: 14px 5%;
+    }
+
+    .brand {
+        font-size: 28px;
+    }
+
+    .hamburger {
+        font-size: 32px;
+    }
+
+    .page-section {
+        padding: 35px 5%;
+    }
+
+    .section-title {
+        font-size: 42px;
+        line-height: 1.05;
+    }
+
+    .section-subtitle {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .search-box {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 8px;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .search-box input {
+        width: 100%;
+        min-width: 0;
+        padding: 13px 14px;
+        font-size: 15px;
+    }
+
+    .search-box button {
+        padding: 13px 14px;
+        font-size: 15px;
+        border-radius: 24px;
+        white-space: nowrap;
+    }
+
+    .categories-container {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .category-card {
+        height: 240px;
+    }
+
+    .category-card h3 {
+        font-size: 34px;
+        line-height: 1.1;
+        left: 26px;
+        bottom: 28px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 430px) {
+    .section-title {
+        font-size: 36px;
+    }
+
+    .search-box {
+        grid-template-columns: 1fr auto auto;
+        gap: 6px;
+    }
+
+    .search-box input {
+        font-size: 14px;
+        padding: 12px 12px;
+    }
+
+    .search-box button {
+        font-size: 14px;
+        padding: 12px 11px;
+    }
+
+    .category-card {
+        height: 220px;
+    }
+
+    .category-card h3 {
+        font-size: 30px;
+    }
+}
