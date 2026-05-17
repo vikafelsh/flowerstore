@@ -116,8 +116,6 @@ function renderProductsByCategory(categoryId, categoryName) {
 }
 
 function openProductDetails(product) {
-    const productLabel = document.querySelector("#productDetailsPage .small-title");
-
     const labels = {
         gift_bouquets: "Gift bouquet",
         wedding_flowers: "Wedding flower",
@@ -126,7 +124,7 @@ function openProductDetails(product) {
         gifts: "Gift item"
     };
 
-    productLabel.textContent = labels[product.categoryId] || "Product";
+    document.getElementById("productLabel").textContent = labels[product.categoryId] || "Product";
 
     document.getElementById("detailsImage").src = product.image;
     document.getElementById("detailsName").textContent = product.name;
@@ -135,6 +133,7 @@ function openProductDetails(product) {
 
     showSection("productDetailsPage");
 }
+
 function backToCurrentCategory() {
     if (currentCategoryId === "search") {
         document.getElementById("categoryPageTitle").textContent = "Search Results";
