@@ -540,3 +540,14 @@ showSection = function(id) {
 basketImg.onload = () => draw();
 bgImg.onload = () => draw();
 /* Закінчення вставки */
+
+function clearAccountData() {
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+
+    document.getElementById("firstNameInput").value = "";
+    document.getElementById("lastNameInput").value = "";
+
+    renderSavedAccount();
+    updateAccountNavbar();
+}
