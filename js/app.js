@@ -1,3 +1,4 @@
+/* Харченко */
 let categories = [];
 let products = [];
 let currentProducts = [];
@@ -224,6 +225,21 @@ function saveAccount() {
     localStorage.setItem("lastName", lastName);
 
     renderSavedAccount();
+    updateAccountNavbar();
+}
+
+function clearAccountData() {
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+
+    document.getElementById("firstNameInput").value = "";
+    document.getElementById("lastNameInput").value = "";
+
+    const savedAccountData = document.getElementById("savedAccountData");
+    savedAccountData.innerHTML = `
+        <p>No account information saved yet.</p>
+    `;
+
     updateAccountNavbar();
 }
 
@@ -541,14 +557,3 @@ showSection = function(id) {
 basketImg.onload = () => draw();
 bgImg.onload = () => draw();
 /* Закінчення вставки */
-
-function clearAccountData() {
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("lastName");
-
-    document.getElementById("firstNameInput").value = "";
-    document.getElementById("lastNameInput").value = "";
-
-    renderSavedAccount();
-    updateAccountNavbar();
-}
