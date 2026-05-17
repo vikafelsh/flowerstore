@@ -190,6 +190,7 @@ function searchProducts() {
 
 function clearSearch() {
     document.getElementById("searchInput").value = "";
+    document.getElementById("searchMessage").textContent = "";
     showSection("catalog");
 }
 
