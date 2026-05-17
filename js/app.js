@@ -445,39 +445,50 @@ function draw() {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     }
 
-    // --- ЛОГІКА "СЕНДВІЧА" ДЛЯ ОБ'ЄМУ ---
+    // --- ЛОГІКА ОБ'ЄМНОГО НАПОВНЕННЯ ---
 
-    // 2. ШАР 1: Квіти на задньому плані (за кошиком)
-    // Малюємо перші 5-7 спійманих квітів трохи вище, щоб їх було видно за бортом
+    // 2. ШАР 1: Квіти за задньою стінкою
+    // Малюємо їх ПЕРЕД кошиком, щоб вони визирали з-за заднього борту
     caughtFlowers.forEach((cf, index) => {
-        if (index % 2 === 0) { // Кожна друга квітка йде на задній план
-            ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY - 5, cf.w, cf.h);
+        if (index % 2 === 0) { 
+            ctx.drawImage(
+                cf.img, 
+                basket.x + cf.offsetX, 
+                basket.y + cf.offsetY + 5, // Трохи вище за основну масу
+                cf.w, 
+                cf.h
+            );
         }
     });
 
-    // 3. ШАР 2: Сама корзинка
+    // 3. ШАР 2: Сама корзинка (основна картинка)
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 4. ШАР 3: Квіти всередині (з обрізкою по овалу)
+    // 4. ШАР 3: Квіти всередині (перед задньою стінкою, але за передньою)
     ctx.save();
     ctx.beginPath();
+    // Малюємо овал обрізки чітко по центру плетіння
     ctx.ellipse(
         basket.x + basket.width / 2, 
         basket.y + 45, 
-        basket.width / 2 - 20, 
-        15, 
+        basket.width / 2 - 22, // Звузили, щоб не вилазило на боки
+        12,                     // Зробили овал плоским
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
     caughtFlowers.forEach((cf, index) => {
-        if (index % 2 !== 0) { // Інші квіти малюємо всередині
-            ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 20, cf.w, cf.h);
+        if (index % 2 !== 0) { 
+            ctx.drawImage(
+                cf.img, 
+                basket.x + cf.offsetX, 
+                basket.y + cf.offsetY + 22, // Глибоко всередині
+                cf.w, 
+                cf.h
+            );
         }
     });
     ctx.restore();
-
-    // --- КІНЕЦЬ СЕНДВІЧА ---
 
     // 5. Падаючі квіти
     flowers.forEach(f => {
@@ -493,7 +504,6 @@ function draw() {
     ctx.font = 'bold 20px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 25, 35);
 }
-
 function gameLoop() {
     if (!gameRunning) return;
     update();
