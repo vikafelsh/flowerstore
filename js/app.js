@@ -303,7 +303,10 @@ let basket = {
     y: canvas.height - 80,
     width: 120,
     height: 90,
-    speed: 9
+    maxSpeed: 10,       // Максимальна швидкість ковзання
+    currentSpeed: 0,    // Поточна швидкість (змінюється кодом)
+    acceleration: 0.9,  // Сила розгону
+    friction: 0.88      // Сила гальмування (чим менше число, тим швидше зупиняється)
 };
 
 let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
