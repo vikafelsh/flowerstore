@@ -440,58 +440,55 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Малюємо фон (пейзаж)
+    // 1. Фон
     if (bgImg.complete) {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    } else {
-        ctx.fillStyle = '#fffafc';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    
-    // 2. Малюємо кошик (корзинку) — це задній шар
-    ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // --- ФІКС: БІЛЬШ ТОЧНА CLIPPING AREA ---
-    ctx.save(); // Зберігаємо стан контексту перед обрізкою
+    // --- ЛОГІКА "СЕНДВІЧА" ДЛЯ ОБ'ЄМУ ---
 
-    // Створюємо зону обрізки у формі овалу ("отвір" корзини)
-    ctx.beginPath();
-    // ТОЧНІ КООРДИНАТИ ДЛЯ ТВОЄЇ КОРЗИНИ:
-    ctx.ellipse(
-        basket.x + basket.width / 2, // Центр по X (всередині кошика)
-        basket.y + 45,               // Опустили овал нижче (тепер він точно в отворі, а не на борту)
-        basket.width / 2 - 20,       // Звузили овал по ширині (щоб не виходив за борти)
-        15,                           // Зменшили висоту овалу (зробили його більш плоским і глибоким)
-        0, 0, Math.PI * 2
-    );
-    ctx.clip(); // Усе, що малюється далі, буде видно лише в межах цього ПРАВИЛЬНОГО овалу
-
-    // Малюємо спіймані квіти всередині цього ПРАВИЛЬНОГО отвору
-    caughtFlowers.forEach(cf => {
-        // Ми примусово опускаємо квіти ще нижче (на 20px), щоб вони не торкалися переднього борту
-        ctx.drawImage(
-            cf.img, 
-            basket.x + cf.offsetX, 
-            basket.y + cf.offsetY + 20, // ДОДАНО +20
-            cf.w, 
-            cf.h
-        );
+    // 2. ШАР 1: Квіти на задньому плані (за кошиком)
+    // Малюємо перші 5-7 спійманих квітів трохи вище, щоб їх було видно за бортом
+    caughtFlowers.forEach((cf, index) => {
+        if (index % 2 === 0) { // Кожна друга квітка йде на задній план
+            ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY - 5, cf.w, cf.h);
+        }
     });
 
-    ctx.restore(); // Відновлюємо контекст (прибираємо маску обрізки)
-    // --- КІНЕЦЬ ФІКСУ ---
+    // 3. ШАР 2: Сама корзинка
+    ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 3. Малюємо падаючі квіти поверх усього
+    // 4. ШАР 3: Квіти всередині (з обрізкою по овалу)
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(
+        basket.x + basket.width / 2, 
+        basket.y + 45, 
+        basket.width / 2 - 20, 
+        15, 
+        0, 0, Math.PI * 2
+    );
+    ctx.clip();
+
+    caughtFlowers.forEach((cf, index) => {
+        if (index % 2 !== 0) { // Інші квіти малюємо всередині
+            ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 20, cf.w, cf.h);
+        }
+    });
+    ctx.restore();
+
+    // --- КІНЕЦЬ СЕНДВІЧА ---
+
+    // 5. Падаючі квіти
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
-    // 4. Плашка рахунку
+    // 6. Рахунок
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
     ctx.fill();
-    
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 25, 35);
