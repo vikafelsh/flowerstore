@@ -1343,3 +1343,12 @@ footer {
         grid-template-columns: repeat(4, 1fr);
     }
 }
+
+.clear-account-btn {
+    background: #f3d5df !important;
+    color: #7a3f55 !important;
+}
+
+.clear-account-btn:hover {
+    background: #e9bdcd !important;
+}
