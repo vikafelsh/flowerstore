@@ -126,6 +126,42 @@ function openProductDetails(product) {
 }
 
 function backToCurrentCategory() {
+    if (currentCategoryId === "search") {
+        document.getElementById("categoryPageTitle").textContent = "Search Results";
+
+        const container = document.getElementById("categoryProductsContainer");
+        container.innerHTML = "";
+
+        currentProducts.forEach(function (product) {
+            const card = document.createElement("div");
+            card.className = "product-card highlight";
+
+            card.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="short-info">
+                        <p>${product.shortDescription}</p>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p>${product.shortDescription}</p>
+                    <div class="price">${product.price}</div>
+                </div>
+            `;
+
+            card.addEventListener("click", function () {
+                openProductDetails(product);
+            });
+
+            container.appendChild(card);
+        });
+
+        showSection("productsPage");
+        return;
+    }
+
     renderProductsByCategory(currentCategoryId, currentCategoryName);
 }
 
@@ -154,6 +190,10 @@ function searchProducts() {
     }
 
     searchMessage.textContent = "";
+
+    currentCategoryId = "search";
+    currentCategoryName = "Search Results";
+    currentProducts = foundProducts;
 
     document.getElementById("categoryPageTitle").textContent = "Search Results";
 
@@ -192,6 +232,11 @@ function searchProducts() {
 function clearSearch() {
     document.getElementById("searchInput").value = "";
     document.getElementById("searchMessage").textContent = "";
+
+    currentCategoryId = "";
+    currentCategoryName = "";
+    currentProducts = [];
+
     showSection("catalog");
 }
 
