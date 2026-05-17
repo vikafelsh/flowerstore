@@ -350,28 +350,37 @@ function spawnFlower() {
     }
 }
 
-function update() {
-    if (!gameRunning) return;
-
-    if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
-    if (keys.ArrowRight || keys.d) basket.x += basket.speed;
-
-    if (basket.x < 0) basket.x = 0;
-    if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
-
-    spawnFlower();
-
-    for (let i = flowers.length - 1; i >= 0; i--) {
+    function update() {
+        if (!gameRunning) return;
+    
+        if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
+        if (keys.ArrowRight || keys.d) basket.x += basket.speed;
+    
+        if (basket.x < 0) basket.x = 0;
+        if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
+    
+        spawnFlower();
+    
+        for (let i = flowers.length - 1; i >= 0; i--) {
         let f = flowers[i];
         f.y += f.speed;
-
-        // ВИПРАВЛЕНА ЛОГІКА ЗІТКНЕННЯ
-        // Тепер використовуємо f.width та f.height замість f.size
-        if (f.y + f.height > basket.y + 20 && 
-            f.x + f.width > basket.x && 
-            f.x < basket.x + basket.width) {
+    
+        // ТОЧНА ЛОГІКА ЗІТКНЕННЯ (Hitbox)
+        // 1. Визначаємо центр квітки
+        const flowerCenterX = f.x + f.width / 2;
+        const flowerBottomY = f.y + f.height;
+    
+        // 2. Визначаємо активну зону кошика (центр корзини)
+        // Залишаємо по 20 пікселів з боків "неактивними"
+        const basketActiveLeft = basket.x + 20;
+        const basketActiveRight = basket.x + basket.width - 20;
+        const basketTop = basket.y + 25; // Квітка має зануритися глибше
+    
+        if (flowerBottomY > basketTop && 
+            flowerCenterX > basketActiveLeft && 
+            flowerCenterX < basketActiveRight) {
             
-            // Якщо квітка перетнула лінію кошика
+            // Перевіряємо, щоб квітка не пролетіла крізь дно
             if (f.y < basket.y + basket.height) {
                 flowers.splice(i, 1);
                 score++;
