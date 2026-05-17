@@ -1725,3 +1725,54 @@ footer {
         padding: 6px 9px;
     }
 }
+
+@media (max-width: 1100px) {
+    .flowers-panel {
+        overflow: hidden;
+    }
+
+    .custom-flowers-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 14px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 14px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .custom-flowers-list::-webkit-scrollbar {
+        height: 8px;
+        display: block;
+    }
+
+    .custom-flowers-list::-webkit-scrollbar-thumb {
+        background: #e8b8c8;
+        border-radius: 20px;
+    }
+
+    .custom-flower-card {
+        min-width: 260px;
+        max-width: 260px;
+        flex: 0 0 260px;
+        scroll-snap-align: start;
+    }
+}
+
+@media (max-width: 575px) {
+    .custom-flower-card {
+        min-width: 245px;
+        max-width: 245px;
+        flex: 0 0 245px;
+    }
+
+    .custom-flower-card img {
+        width: 65px;
+        height: 85px;
+        flex-shrink: 0;
+    }
+}
