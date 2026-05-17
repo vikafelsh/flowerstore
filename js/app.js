@@ -351,36 +351,58 @@ function spawnFlower() {
 }
 
     function update() {
-        if (!gameRunning) return;
-    
-        if (keys.ArrowLeft || keys.a) basket.x -= basket.speed;
-        if (keys.ArrowRight || keys.d) basket.x += basket.speed;
-    
-        if (basket.x < 0) basket.x = 0;
-        if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
-    
-        spawnFlower();
-    
-        for (let i = flowers.length - 1; i >= 0; i--) {
+    if (!gameRunning) return;
+
+    // 1. ПЛАВНИЙ РУХ ТА ІНЕРЦІЯ
+    if (keys.ArrowLeft || keys.a) {
+        // Поступовий розгін вліво
+        basket.currentSpeed -= basket.acceleration;
+    } else if (keys.ArrowRight || keys.d) {
+        // Поступовий розгін вправо
+        basket.currentSpeed += basket.acceleration;
+    } else {
+        // Ефект тертя: швидкість поступово падає до 0, коли кнопки відпущені
+        basket.currentSpeed *= basket.friction;
+    }
+
+    // Обмеження максимальної швидкості (щоб кошик не розігнався до безкінечності)
+    if (basket.currentSpeed > basket.maxSpeed) basket.currentSpeed = basket.maxSpeed;
+    if (basket.currentSpeed < -basket.maxSpeed) basket.currentSpeed = -basket.maxSpeed;
+
+    // Оновлення позиції x на основі розрахованої швидкості
+    basket.x += basket.currentSpeed;
+
+    // 2. ЖОРСТКІ МЕЖІ ЕКРАНА
+    if (basket.x < 0) {
+        basket.x = 0;
+        basket.currentSpeed = 0; // Зупиняємо швидкість при ударі об стінку
+    }
+    if (basket.x > canvas.width - basket.width) {
+        basket.x = canvas.width - basket.width;
+        basket.currentSpeed = 0;
+    }
+
+    spawnFlower();
+
+    // 3. ЛОГІКА КВІТІВ ТА ПЕРЕВІРКА ЗІТКНЕНЬ
+    for (let i = flowers.length - 1; i >= 0; i--) {
         let f = flowers[i];
         f.y += f.speed;
-    
-        // ТОЧНА ЛОГІКА ЗІТКНЕННЯ (Hitbox)
-        // 1. Визначаємо центр квітки
+
+        // Визначаємо точки для точного Hitbox
         const flowerCenterX = f.x + f.width / 2;
         const flowerBottomY = f.y + f.height;
-    
-        // 2. Визначаємо активну зону кошика (центр корзини)
-        // Залишаємо по 20 пікселів з боків "неактивними"
-        const basketActiveLeft = basket.x + 20;
-        const basketActiveRight = basket.x + basket.width - 20;
-        const basketTop = basket.y + 25; // Квітка має зануритися глибше
-    
+
+        // Активна зона всередині кошика (вужча за картинку для реалізму)
+        const basketActiveLeft = basket.x + 25; 
+        const basketActiveRight = basket.x + basket.width - 25;
+        const basketTop = basket.y + 30; // Квітка має залетіти трохи глибше
+
         if (flowerBottomY > basketTop && 
             flowerCenterX > basketActiveLeft && 
             flowerCenterX < basketActiveRight) {
             
-            // Перевіряємо, щоб квітка не пролетіла крізь дно
+            // Перевіряємо занурення (щоб не зловити квітку під дном кошика)
             if (f.y < basket.y + basket.height) {
                 flowers.splice(i, 1);
                 score++;
