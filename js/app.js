@@ -303,7 +303,10 @@ let basket = {
     y: canvas.height - 80,
     width: 120,
     height: 90,
-    speed: 10 // Фіксована швидкість для миттєвого руху
+    maxSpeed: 12,       // Трохи швидше для реакції
+    currentSpeed: 0,
+    acceleration: 2.5,  // Високе прискорення для швидкого старту
+    friction: 0.7       // Швидке гальмування (золота середина)
 };
 
 let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
@@ -353,20 +356,38 @@ function spawnFlower() {
     function update() {
     if (!gameRunning) return;
 
-    // Чітке керування без інерції
+    // ЗОЛОТА СЕРЕДИНА КЕРУВАННЯ
     if (keys.ArrowLeft || keys.a) {
-        basket.x -= basket.speed;
+        basket.currentSpeed -= basket.acceleration;
     } else if (keys.ArrowRight || keys.d) {
-        basket.x += basket.speed;
+        basket.currentSpeed += basket.acceleration;
+    } else {
+        // Миттєве, але м'яке сповільнення
+        basket.currentSpeed *= basket.friction;
+        
+        // Повністю зупиняємо, якщо швидкість стала зовсім малою (щоб не "тремтів")
+        if (Math.abs(basket.currentSpeed) < 0.1) basket.currentSpeed = 0;
     }
 
-    // Жорсткі межі екрана
-    if (basket.x < 0) basket.x = 0;
-    if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
+    // Обмеження швидкості
+    if (basket.currentSpeed > basket.maxSpeed) basket.currentSpeed = basket.maxSpeed;
+    if (basket.currentSpeed < -basket.maxSpeed) basket.currentSpeed = -basket.maxSpeed;
+
+    basket.x += basket.currentSpeed;
+
+    // Межі екрана
+    if (basket.x < 0) {
+        basket.x = 0;
+        basket.currentSpeed = 0;
+    }
+    if (basket.x > canvas.width - basket.width) {
+        basket.x = canvas.width - basket.width;
+        basket.currentSpeed = 0;
+    }
 
     spawnFlower();
 
-    // Логіка зіткнень (залишаємо без змін, вона працює добре)
+    // Твоя точна логіка колізій (залишаємо без змін)
     for (let i = flowers.length - 1; i >= 0; i--) {
         let f = flowers[i];
         f.y += f.speed;
@@ -385,8 +406,7 @@ function spawnFlower() {
                 flowers.splice(i, 1);
                 score++;
             }
-        } 
-        else if (f.y > canvas.height) {
+        } else if (f.y > canvas.height) {
             endGame();
         }
     }
