@@ -440,6 +440,7 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // 1. Малюємо фон
     if (bgImg.complete) {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     } else {
@@ -447,19 +448,38 @@ function draw() {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     
-    // Малюємо кошик
+    // 2. Малюємо кошик (спочатку саму корзину)
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // Малюємо спіймані квіти всередині кошика
+    // --- ЛОГІКА ОБРІЗКИ (CLIPPING) ДЛЯ КВІТІВ У КОРЗИНІ ---
+    ctx.save(); // Зберігаємо стан контексту перед обрізкою
+
+    // Створюємо область обрізки у формі овалу (це "отвір" корзини)
+    ctx.beginPath();
+    ctx.ellipse(
+        basket.x + basket.width / 2, // Центр корзини по X
+        basket.y + 35,               // Трохи нижче верхнього краю корзини
+        basket.width / 2 - 15,       // Ширина отвору
+        20,                          // Висота отвору (робимо плаский овал)
+        0, 0, Math.PI * 2
+    );
+    ctx.clip(); // Усе, що малюється далі, буде видно лише в межах цього овалу
+
+    // Малюємо спіймані квіти всередині цієї маски
     caughtFlowers.forEach(cf => {
-        ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY, cf.w, cf.h);
+        // Додаємо +15 до Y, щоб вони візуально "провалилися" всередину
+        ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 15, cf.w, cf.h);
     });
 
-    // Малюємо падаючі квіти
+    ctx.restore(); // Повертаємо контекст у звичайний стан (щоб маска не впливала на все інше)
+    // --- КІНЕЦЬ ОБРІЗКИ ---
+
+    // 3. Малюємо падаючі квіти (поверх усього)
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
+    // 4. Плашка рахунку
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
