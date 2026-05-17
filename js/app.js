@@ -101,7 +101,6 @@ function renderProductsByCategory(categoryId, categoryName) {
 
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <p>${product.shortDescription}</p>
                 <div class="price">${product.price}</div>
             </div>
         `;
@@ -146,7 +145,6 @@ function backToCurrentCategory() {
 
                 <div class="product-info">
                     <h3>${product.name}</h3>
-                    <p>${product.shortDescription}</p>
                     <div class="price">${product.price}</div>
                 </div>
             `;
@@ -214,7 +212,6 @@ function searchProducts() {
 
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <p>${product.shortDescription}</p>
                 <div class="price">${product.price}</div>
             </div>
         `;
