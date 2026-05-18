@@ -1669,11 +1669,12 @@ footer {
     }
 
     .account-info {
-        font-size: 13px;
-        max-width: 80px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+    font-size: 13px;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
     .nav-menu {
         grid-column: 1 / -1;
