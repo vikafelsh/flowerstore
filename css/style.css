@@ -2325,3 +2325,33 @@ footer {
         font-size: 14px;
     }
 }
+
+.quantity-box {
+    margin: 18px 0 22px;
+}
+
+.quantity-box label {
+    display: block;
+    color: #5b3a46;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.quantity-box input {
+    width: 130px;
+    padding: 12px 16px;
+    border: 1px solid #e7b8c6;
+    border-radius: 22px;
+    outline: none;
+    font-size: 16px;
+    color: #5b3a46;
+    background: #fff8f4;
+}
+
+.quantity-message {
+    margin-top: 10px;
+    color: #b15d77 !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    font-weight: 600;
+}
