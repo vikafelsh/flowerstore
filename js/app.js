@@ -470,18 +470,27 @@ function update() {
             flowerCenterX < basketActiveRight) {
             
             if (f.y < basket.y + basket.height) {
-                if (caughtFlowers.length < maxVisualFlowers) {
-                    const safeWidth = basket.width - 60; 
-                    caughtFlowers.push({
-                        img: f.img,
-                        offsetX: 30 + Math.random() * safeWidth, 
-                        offsetY: Math.random() * 10, 
-                        w: 42, // Фіксований розмір для стабільності
-                        h: 42
-                    });
+            if (caughtFlowers.length < maxVisualFlowers) {
+                // РОЗШИРЮЄМО зону появи, щоб зліва теж були квіти
+                const safeWidth = basket.width - 40; 
+                
+                // Зберігаємо пропорції картинки
+                const trophyWidth = 40;
+                let trophyHeight = trophyWidth;
+                if (f.img.naturalHeight > 0) {
+                    trophyHeight = trophyWidth / (f.img.naturalWidth / f.img.naturalHeight);
                 }
-                flowers.splice(i, 1);
-                score++;
+        
+                caughtFlowers.push({
+                    img: f.img,
+                    offsetX: 15 + Math.random() * safeWidth, // Починаємо ближче до лівого краю
+                    offsetY: Math.random() * 12, 
+                    w: trophyWidth,
+                    h: trophyHeight
+                });
+            }
+            flowers.splice(i, 1);
+            score++;
             }
         } else if (f.y > canvas.height) {
             endGame();
@@ -506,30 +515,31 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Фон та кошик
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    
+    // 1. Малюємо кошик
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 2. МАЛЮЄМО КВІТИ ВСЕРЕДИНІ
+    // 2. МАЛЮЄМО КВІТИ З ПРАВИЛЬНОЮ ОБРІЗКОЮ
     ctx.save();
-    ctx.beginPath();
     
-    // Маска-еліпс (піднята до 38 для максимальної видимості)
+    // Створюємо зону обрізки
+    ctx.beginPath();
     ctx.ellipse(
         basket.x + basket.width / 2, 
-        basket.y + 38, 
-        basket.width / 2 - 25, 
-        15, 
+        basket.y + 40, // Центр отвору
+        basket.width / 2 - 12, // Розширили, щоб зліва і справа було більше місця
+        18, // Збільшили висоту маски, щоб квіти не обрізалися зверху/знизу
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
     caughtFlowers.forEach(cf => {
-        // Координати зміщені до +12, щоб квіти були під самим краєм
+        // Використовуємо індивідуальну висоту cf.h, щоб не було ефекту приплюснутості
         ctx.drawImage(
             cf.img, 
             basket.x + cf.offsetX, 
-            basket.y + cf.offsetY + 12, 
+            basket.y + cf.offsetY + 15, 
             cf.w, 
             cf.h
         );
@@ -537,12 +547,11 @@ function draw() {
 
     ctx.restore();
 
-    // 3. Падаючі квіти
+    // 3. Падаючі квіти та рахунок
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
     
-    // 4. Рахунок
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
