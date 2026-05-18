@@ -368,6 +368,11 @@ function saveAccount() {
         return;
     }
 
+    if (firstName.length > 20 || lastName.length > 20) {
+    alert("First name and last name must be no longer than 20 characters.");
+    return;
+    }
+    
     localStorage.setItem("firstName", firstName);
     localStorage.setItem("lastName", lastName);
 
