@@ -508,7 +508,7 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Фон та кошик (залишаємо як було)
+    // 1. Фон та кошик (без змін)
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
@@ -516,22 +516,22 @@ function draw() {
     ctx.save();
     ctx.beginPath();
     
-    // ПІДНЯТО: змінили 55 на 48, щоб овал-маска був вище
+    // ПІДНЯТО: змінили 48 на 42 для вищого положення "отвору"
     ctx.ellipse(
         basket.x + basket.width / 2, 
-        basket.y + 48, 
+        basket.y + 42, 
         basket.width / 2 - 30, 
-        12, // Трохи збільшив висоту овалу для простору
+        12, 
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
     caughtFlowers.forEach(cf => {
-        // ПІДНЯТО: змінили 35 на 25, щоб квіти малювалися вище
+        // ПІДНЯТО: змінили 25 на 18 для підняття самих квіток
         ctx.drawImage(
             cf.img, 
             basket.x + cf.offsetX, 
-            basket.y + cf.offsetY + 25, 
+            basket.y + cf.offsetY + 18, 
             cf.w, 
             cf.h
         );
@@ -539,7 +539,7 @@ function draw() {
 
     ctx.restore();
 
-    // 3. Падаючі квіти та рахунок (залишаємо без змін)
+    // 3. Падаючі квіти та все інше (залишаємо як було)
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
