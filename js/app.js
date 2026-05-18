@@ -469,20 +469,19 @@ function update() {
             flowerCenterX > basketActiveLeft && 
             flowerCenterX < basketActiveRight) {
             
+            // Шукай цей блок усередині update(), де квітка ловиться:
             if (f.y < basket.y + basket.height) {
-                
-                // Додаємо квіточку в "візуальний" кошик
                 if (caughtFlowers.length < maxVisualFlowers) {
+                    // Розраховуємо безпечну зону всередині (центр кошика)
+                    const safeWidth = basket.width - 60; // Вузька зона, щоб не вилазило
                     caughtFlowers.push({
                         img: f.img,
-                        // Рандомне зміщення всередині кошика
-                        offsetX: Math.random() * (basket.width - 40) + 10,
-                        offsetY: Math.random() * 20 + 5, 
-                        w: f.width * 0.7, // Робимо трохи меншими
-                        h: f.height * 0.7
+                        offsetX: 30 + Math.random() * safeWidth, // Починаємо з 30px від краю
+                        offsetY: 10 + Math.random() * 15,       // Невелика глибина
+                        w: 45, // Фіксована ширина для трофеїв
+                        h: 45  // Фіксована висота, щоб не плющило
                     });
                 }
-
                 flowers.splice(i, 1);
                 score++;
             }
@@ -514,57 +513,34 @@ function draw() {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     }
 
-    // --- ЛОГІКА ОБ'ЄМНОГО НАПОВНЕННЯ ---
-
-    // 2. ШАР 1: Квіти за задньою стінкою
-    // Малюємо їх ПЕРЕД кошиком, щоб вони визирали з-за заднього борту
-    caughtFlowers.forEach((cf, index) => {
-        if (index % 2 === 0) { 
-            ctx.drawImage(
-                cf.img, 
-                basket.x + cf.offsetX, 
-                basket.y + cf.offsetY + 5, // Трохи вище за основну масу
-                cf.w, 
-                cf.h
-            );
-        }
-    });
-
-    // 3. ШАР 2: Сама корзинка (основна картинка)
+    // 2. Спочатку малюємо порожню корзину
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 4. ШАР 3: Квіти всередині (перед задньою стінкою, але за передньою)
+    // 3. Малюємо спіймані квіти ТІЛЬКИ всередині безпечної зони
     ctx.save();
     ctx.beginPath();
-    // Малюємо овал обрізки чітко по центру плетіння
+    // Створюємо маску обрізки (строгий овал всередині плетіння)
     ctx.ellipse(
         basket.x + basket.width / 2, 
-        basket.y + 45, 
-        basket.width / 2 - 22, // Звузили, щоб не вилазило на боки
-        12,                     // Зробили овал плоским
+        basket.y + 40, 
+        basket.width / 2 - 25, // Сувора ширина
+        12,                    // Сувора висота
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
-    caughtFlowers.forEach((cf, index) => {
-        if (index % 2 !== 0) { 
-            ctx.drawImage(
-                cf.img, 
-                basket.x + cf.offsetX, 
-                basket.y + cf.offsetY + 22, // Глибоко всередині
-                cf.w, 
-                cf.h
-            );
-        }
+    caughtFlowers.forEach(cf => {
+        // Малюємо квіти. Якщо картинка ще вантажиться, воно не зламає пропорції
+        ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 15, cf.w, cf.h);
     });
     ctx.restore();
 
-    // 5. Падаючі квіти
+    // 4. Падаючі квіти
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
-    // 6. Рахунок
+    // 5. Рахунок
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
@@ -573,6 +549,7 @@ function draw() {
     ctx.font = 'bold 20px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 25, 35);
 }
+
 function gameLoop() {
     if (!gameRunning) return;
     update();
