@@ -4,6 +4,7 @@ let products = [];
 let currentProducts = [];
 let currentCategoryId = "";
 let currentCategoryName = "";
+let selectedProduct = null;
 
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const navMenu = document.getElementById("navMenu");
@@ -116,6 +117,8 @@ function renderProductsByCategory(categoryId, categoryName) {
 }
 
 function openProductDetails(product) {
+    selectedProduct = product;
+
     const labels = {
         gift_bouquets: "Gift bouquet",
         wedding_flowers: "Wedding flower",
@@ -129,9 +132,54 @@ function openProductDetails(product) {
     document.getElementById("detailsImage").src = product.image;
     document.getElementById("detailsName").textContent = product.name;
     document.getElementById("detailsDescription").textContent = product.fullDescription;
-    document.getElementById("detailsPrice").textContent = product.price;
+
+    const quantityBox = document.getElementById("quantityBox");
+    const quantityInput = document.getElementById("quantityInput");
+    const quantityMessage = document.getElementById("quantityMessage");
+
+    const flowerCategories = ["gift_bouquets", "wedding_flowers", "seasonal_flowers"];
+
+    if (flowerCategories.includes(product.categoryId)) {
+        quantityBox.style.display = "block";
+        quantityInput.value = 1;
+        quantityMessage.textContent = "";
+        updateProductTotal();
+    } else {
+        quantityBox.style.display = "none";
+        document.getElementById("detailsPrice").textContent = product.price;
+    }
 
     showSection("productDetailsPage");
+}
+
+function updateProductTotal() {
+    if (!selectedProduct) {
+        return;
+    }
+
+    const quantityInput = document.getElementById("quantityInput");
+    const quantityMessage = document.getElementById("quantityMessage");
+    const detailsPrice = document.getElementById("detailsPrice");
+
+    const quantity = Number(quantityInput.value);
+    const productPrice = Number(selectedProduct.price.replace("$", ""));
+
+    if (quantity > 100) {
+        quantityMessage.textContent = "For more than 100 flowers, please contact the shop to confirm availability.";
+        detailsPrice.textContent = "Contact shop";
+        return;
+    }
+
+    if (quantity < 1 || isNaN(quantity)) {
+        quantityMessage.textContent = "Please enter a valid quantity.";
+        detailsPrice.textContent = selectedProduct.price;
+        return;
+    }
+
+    quantityMessage.textContent = "";
+
+    const totalPrice = productPrice * quantity;
+    detailsPrice.textContent = `$${totalPrice}`;
 }
 
 function backToCurrentCategory() {
