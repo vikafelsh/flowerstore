@@ -1137,11 +1137,10 @@ canvas {
 }
 
 .builder-back-btn {
-    position: absolute;
-    top: -52px;
-    left: 0;
+    grid-column: 1 / -1;
+    width: fit-content;
+    margin-bottom: -4px;
     padding: 12px 22px;
-    border: none;
     border-radius: 999px;
     background: #f5d4df;
     color: #5a3a45;
@@ -1149,6 +1148,7 @@ canvas {
     cursor: pointer;
     box-shadow: 0 8px 18px rgba(120, 70, 90, 0.12);
     transition: 0.25s ease;
+    z-index: 10;
 }
 
 .builder-back-btn:hover {
@@ -1837,6 +1837,11 @@ footer {
     .custom-builder {
         grid-template-columns: 220px minmax(0, 1fr) 220px;
         gap: 18px;
+    }
+
+    .builder-back-btn {
+        grid-column: 1 / -1;
+        margin-bottom: -2px;
     }
 
     .flowers-panel,
