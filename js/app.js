@@ -496,10 +496,12 @@ function draw() {
 
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-    // Відображення кошика залежно від прогресу
+    // Display the basket based on progress
     if (score >= 15 && basketFullImg.complete) {
+        // Full basket when discount is earned
         ctx.drawImage(basketFullImg, basket.x, basket.y, basket.width, basket.height);
     } else {
+        // Empty basket during the progress
         ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
     }
 
@@ -507,26 +509,31 @@ function draw() {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
-    // Плашка рахунку
+    // Score plate
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
     ctx.fill();
+    
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
-    ctx.fillText(`Рахунок: ${score}`, 25, 35);
+    // Changed to English
+    ctx.fillText(`Score: ${score}`, 25, 35);
 }
 
 function endGame() {
     gameRunning = false;
     cancelAnimationFrame(animationId);
     gameOverScreen.classList.remove('hidden');
-    finalScoreText.textContent = `Спіймано квітів: ${score}`;
+    
+    // Updated strings for Game Over screen
+    finalScoreText.textContent = `Flowers caught: ${score}`;
+    
     let goal = 15;
     if (score >= goal) {
-        discountInfoText.textContent = "Вітаємо! Ваша знижка 10%: BLOOM10";
+        discountInfoText.textContent = "Congratulations! Your 10% discount: BLOOM10";
     } else {
-        discountInfoText.textContent = `До знижки не вистачило ${goal - score} шт.`;
+        discountInfoText.textContent = `You needed ${goal - score} more for a discount.`;
     }
 }
 
