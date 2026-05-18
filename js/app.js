@@ -469,17 +469,15 @@ function update() {
             flowerCenterX > basketActiveLeft && 
             flowerCenterX < basketActiveRight) {
             
-            // Усередині update(), де квітка ловиться:
             if (f.y < basket.y + basket.height) {
                 if (caughtFlowers.length < maxVisualFlowers) {
-                    // Зона появи стала ще вужчою, щоб квіти не торкалися країв кошика
-                    const safeWidth = basket.width - 70; 
+                    const safeWidth = basket.width - 60; 
                     caughtFlowers.push({
                         img: f.img,
-                        offsetX: 35 + Math.random() * safeWidth, 
-                        offsetY: Math.random() * 10, // Мінімальний розкид по вертикалі
-                        w: 40, // Невеличкий розмір, щоб влізали в "щілину"
-                        h: 40
+                        offsetX: 30 + Math.random() * safeWidth, 
+                        offsetY: Math.random() * 10, 
+                        w: 42, // Фіксований розмір для стабільності
+                        h: 42
                     });
                 }
                 flowers.splice(i, 1);
@@ -508,7 +506,7 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Фон та кошик (без змін)
+    // 1. Фон та кошик
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
@@ -516,22 +514,22 @@ function draw() {
     ctx.save();
     ctx.beginPath();
     
-    // ПІДНЯТО: змінили 48 на 42 для вищого положення "отвору"
+    // Маска-еліпс (піднята до 38 для максимальної видимості)
     ctx.ellipse(
         basket.x + basket.width / 2, 
-        basket.y + 42, 
-        basket.width / 2 - 30, 
-        12, 
+        basket.y + 38, 
+        basket.width / 2 - 25, 
+        15, 
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
     caughtFlowers.forEach(cf => {
-        // ПІДНЯТО: змінили 25 на 18 для підняття самих квіток
+        // Координати зміщені до +12, щоб квіти були під самим краєм
         ctx.drawImage(
             cf.img, 
             basket.x + cf.offsetX, 
-            basket.y + cf.offsetY + 18, 
+            basket.y + cf.offsetY + 12, 
             cf.w, 
             cf.h
         );
@@ -539,12 +537,12 @@ function draw() {
 
     ctx.restore();
 
-    // 3. Падаючі квіти та все інше (залишаємо як було)
+    // 3. Падаючі квіти
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
     
-    // 5. Рахунок
+    // 4. Рахунок
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
@@ -565,7 +563,7 @@ function startGame() {
     gameRunning = true;
     score = 0;
     flowers = [];
-    caughtFlowers = []; // Очищуємо кошик
+    caughtFlowers = []; 
     framesSinceLastSpawn = 0;
     basket.x = canvas.width / 2 - basket.width / 2;
     startScreen.classList.add('hidden');
