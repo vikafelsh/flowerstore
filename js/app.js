@@ -508,39 +508,42 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Малюємо фон
-    if (bgImg.complete) {
-        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    }
-
-    // 2. Малюємо кошик (він служить і задньою, і передньою стінкою одночасно)
+    // 1. Фон та кошик (залишаємо як було)
+    if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 3. Малюємо квіти всередині (з дуже суворою обрізкою)
+    // 2. МАЛЮЄМО КВІТИ ВСЕРЕДИНІ
     ctx.save();
     ctx.beginPath();
-    // Цей овал — це "щілина" всередині плетіння. 
-    // Все, що виходить за його межі (вгору за задню стінку чи вниз на передню), зникне.
+    
+    // ПІДНЯТО: змінили 55 на 48, щоб овал-маска був вище
     ctx.ellipse(
         basket.x + basket.width / 2, 
-        basket.y + 55, // Опустили центр маски нижче вглиб кошика
-        basket.width / 2 - 30, // Вузька маска по боках
-        10, // Дуже пласка маска (відрізає верх і задня стінка залишається чистою)
+        basket.y + 48, 
+        basket.width / 2 - 30, 
+        12, // Трохи збільшив висоту овалу для простору
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
     caughtFlowers.forEach(cf => {
-        // Малюємо квіти так, щоб їхній центр був у зоні маски
-        ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 35, cf.w, cf.h);
+        // ПІДНЯТО: змінили 35 на 25, щоб квіти малювалися вище
+        ctx.drawImage(
+            cf.img, 
+            basket.x + cf.offsetX, 
+            basket.y + cf.offsetY + 25, 
+            cf.w, 
+            cf.h
+        );
     });
+
     ctx.restore();
 
-    // 4. Малюємо падаючі квіти
+    // 3. Падаючі квіти та рахунок (залишаємо без змін)
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
-
+    
     // 5. Рахунок
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
