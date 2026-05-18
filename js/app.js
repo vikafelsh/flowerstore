@@ -429,23 +429,20 @@ function updateAccountNavbar() {
 
 /* Вставка Варі */
 
-// 1. ЗАВАНТАЖЕННЯ ЗОБРАЖЕНЬ
 const bgImg = new Image();
 bgImg.src = 'assets/background.jpg';
 
 const basketImg = new Image();
-basketImg.src = 'assets/basket.png'; // Порожній кошик (0 - 14 квітів)
+basketImg.src = 'assets/basket.png'; 
 
-// --- НОВІ КАРТИНКИ ДЛЯ РІЗНИХ РІВНІВ ЗНИЖОК ---
 const basketFull15Img = new Image();
-basketFull15Img.src = 'assets/basketFull15.png'; // Наповнений кошик (15 - 29 квітів)
+basketFull15Img.src = 'assets/basketFull15.png'; 
 
 const basketFull30Img = new Image();
-basketFull30Img.src = 'assets/basketFull30.png'; // Ще більше квітів (30 - 49 квітів)
+basketFull30Img.src = 'assets/basketFull30.png'; 
 
 const basketFull50Img = new Image();
-basketFull50Img.src = 'assets/basketFull50.png'; // Максимально повний кошик (50+ квітів)
-// ----------------------------------------------
+basketFull50Img.src = 'assets/basketFull50.png'; ї
 
 const flowerFiles = [
     'flower1.1.png', 'flower1.2.png', 'flower1.3.png', 
@@ -458,7 +455,6 @@ const flowerImages = flowerFiles.map(file => {
     return img;
 });
 
-// Елементи інтерфейсу
 const canvas = document.getElementById('flowerGame');
 const ctx = canvas.getContext('2d');
 const startScreen = document.getElementById('game-start-screen');
@@ -488,14 +484,11 @@ let basket = {
     friction: 0.85
 };
 
-// --- КЕРУВАННЯ ---
 let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
 
-// Клавіатура
 document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = true; });
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
-// Сенсор (для телефонів)
 canvas.addEventListener('touchstart', handleTouch, { passive: false });
 canvas.addEventListener('touchmove', handleTouch, { passive: false });
 canvas.addEventListener('touchend', () => {
@@ -595,27 +588,20 @@ function draw() {
 
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-    // --- ОНОВЛЕНА ЛОГІКА ЕВОЛЮЦІЇ КОРЗИНИ ---
     if (score >= 50 && basketFull50Img.complete) {
-        // 50+ квітів — Максимальний рівень
         ctx.drawImage(basketFull50Img, basket.x, basket.y, basket.width, basket.height);
     } else if (score >= 30 && basketFull30Img.complete) {
-        // 30-49 квітів — Середній рівень
         ctx.drawImage(basketFull30Img, basket.x, basket.y, basket.width, basket.height);
     } else if (score >= 15 && basketFull15Img.complete) {
-        // 15-29 квітів — Перший рівень
         ctx.drawImage(basketFull15Img, basket.x, basket.y, basket.width, basket.height);
     } else {
-        // Порожній кошик за замовчуванням
         ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
     }
-    // ----------------------------------------
 
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
 
-    // Score plate
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
