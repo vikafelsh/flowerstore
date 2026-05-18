@@ -2294,17 +2294,6 @@ footer {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
 
-    .wrapping-variation-item {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
-        flex: none !important;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-    }
-
     .wrapping-variation-image {
         width: 100%;
         height: 150px;
