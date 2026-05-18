@@ -4,6 +4,7 @@ let selectedWrapping = null;
 let bouquetItems = [];
 let selectedFlowerElement = null;
 let flowerCounter = 0;
+const MAX_FLOWERS = 100;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadCustomBouquetData();
@@ -164,6 +165,11 @@ function renderCustomFlowers() {
 }
 
 function addFlowerWithColor(flowerId, colorId) {
+    if (bouquetItems.length >= MAX_FLOWERS) {
+        alert("You can add a maximum of 100 flowers to one bouquet.");
+        return;
+    }
+
     const flower = customFlowers.find(item => item.id === flowerId);
     if (!flower) return;
 
@@ -512,6 +518,10 @@ function chooseRandomWrapping() {
 }
 
 function addRandomFlower() {
+    if (bouquetItems.length >= MAX_FLOWERS) {
+        return;
+    }
+
     const flower = customFlowers[Math.floor(Math.random() * customFlowers.length)];
     const color = flower.colors[Math.floor(Math.random() * flower.colors.length)];
 
@@ -533,7 +543,6 @@ function addRandomFlower() {
     bouquetItems.push(flowerItem);
     createFlowerElement(flowerItem);
 }
-
 function saveBouquetDesign() {
     const saveMessage = document.getElementById("saveBouquetMessage");
 
