@@ -561,6 +561,7 @@ h3 {
     display: block;
     background: linear-gradient(#fff8f4, #fff);
     cursor: none;
+    touch-action: none;
 }
 
 #game-over-screen,
