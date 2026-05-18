@@ -526,14 +526,21 @@ function endGame() {
     cancelAnimationFrame(animationId);
     gameOverScreen.classList.remove('hidden');
     
-    // Updated strings for Game Over screen
     finalScoreText.textContent = `Flowers caught: ${score}`;
     
-    let goal = 15;
-    if (score >= goal) {
-        discountInfoText.textContent = "Congratulations! Your 10% discount: BLOOM10";
+    // Thresholds
+    const goal10 = 15;
+    const goal15 = 30;
+    const goal20 = 50;
+
+    if (score >= goal20) {
+        discountInfoText.innerHTML = "LEGENDARY! You've unlocked 20% OFF:<br><strong>BLOOM20</strong>";
+    } else if (score >= goal15) {
+        discountInfoText.innerHTML = "AMAZING! You've unlocked 15% OFF:<br><strong>BLOOM15</strong>";
+    } else if (score >= goal10) {
+        discountInfoText.innerHTML = "GREAT! You've unlocked 10% OFF:<br><strong>BLOOM10</strong>";
     } else {
-        discountInfoText.textContent = `You needed ${goal - score} more for a discount.`;
+        discountInfoText.textContent = `Catch at least ${goal10} flowers to get a discount. You were so close!`;
     }
 }
 
