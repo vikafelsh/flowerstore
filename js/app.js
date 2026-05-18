@@ -442,7 +442,7 @@ const basketFull30Img = new Image();
 basketFull30Img.src = 'assets/basketFull30.png'; 
 
 const basketFull50Img = new Image();
-basketFull50Img.src = 'assets/basketFull50.png'; ї
+basketFull50Img.src = 'assets/basketFull50.png'; 
 
 const flowerFiles = [
     'flower1.1.png', 'flower1.2.png', 'flower1.3.png', 
