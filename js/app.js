@@ -390,21 +390,31 @@ document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = t
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
 // Сенсор (для телефонів)
+// Сенсор (для телефонів)
 canvas.addEventListener('touchstart', handleTouch, { passive: false });
 canvas.addEventListener('touchmove', handleTouch, { passive: false });
+canvas.addEventListener('touchend', () => {
+    if (gameRunning) basket.currentSpeed = 0;
+}, { passive: false });
 
 function handleTouch(e) {
     if (!gameRunning) return;
-    e.preventDefault(); // Забороняємо скрол сторінки під час гри
+    e.preventDefault(); // Блокуємо стандартний скрол сторінки
 
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
-    const touchX = touch.clientX - rect.left;
+    
+    // Розраховуємо коефіцієнт масштабування
+    // (внутрішня ширина 400 / реальна ширина на екрані)
+    const scaleX = canvas.width / rect.width;
+    
+    // Отримуємо точну координату X відносно канвасу
+    const touchX = (touch.clientX - rect.left) * scaleX;
 
     // Центруємо кошик по пальцю
     basket.x = touchX - basket.width / 2;
 
-    // Межі екрана для сенсора
+    // Обмеження меж
     if (basket.x < 0) basket.x = 0;
     if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
 }
