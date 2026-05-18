@@ -173,16 +173,17 @@ function addFlowerWithColor(flowerId, colorId) {
     flowerCounter++;
 
     const flowerItem = {
-        itemId: `flower-${flowerCounter}`,
-        name: flower.name,
-        colorName: color.name,
-        price: flower.price,
-        image: color.image,
-        size: flower.defaultSize,
-        rotation: 0,
-        x: 50,
-        y: 50
-    };
+    itemId: `flower-${flowerCounter}`,
+    name: flower.name,
+    colorName: color.name,
+    price: flower.price,
+    image: color.image,
+    size: flower.defaultSize,
+    rotation: 0,
+    x: 50,
+    y: 50,
+    zIndex: flowerCounter
+    };  
 
     bouquetItems.push(flowerItem);
     createFlowerElement(flowerItem);
@@ -213,6 +214,7 @@ function setFlowerStyle(element, item) {
     element.style.width = `${item.size}px`;
     element.style.left = `${item.x}%`;
     element.style.top = `${item.y}%`;
+    element.style.zIndex = item.zIndex;
     element.style.transform = `translate(-50%, -50%) rotate(${item.rotation}deg)`;
 }
 
@@ -518,4 +520,28 @@ function saveBouquetDesign() {
     if (saveMessage) {
         saveMessage.textContent = "Букет збережено! Ви можете повернутися до нього пізніше.";
     }
+}
+
+function bringSelectedFlowerForward() {
+    if (!selectedFlowerElement) return;
+
+    const item = getBouquetItemByElement(selectedFlowerElement);
+    if (!item) return;
+
+    const maxZIndex = Math.max(...bouquetItems.map(flower => flower.zIndex || 1));
+
+    item.zIndex = maxZIndex + 1;
+    setFlowerStyle(selectedFlowerElement, item);
+}
+
+function sendSelectedFlowerBackward() {
+    if (!selectedFlowerElement) return;
+
+    const item = getBouquetItemByElement(selectedFlowerElement);
+    if (!item) return;
+
+    const minZIndex = Math.min(...bouquetItems.map(flower => flower.zIndex || 1));
+
+    item.zIndex = minZIndex - 1;
+    setFlowerStyle(selectedFlowerElement, item);
 }
