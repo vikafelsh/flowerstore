@@ -390,6 +390,11 @@ function updateBouquetSummary() {
 }
 
 function finishBouquet() {
+    if (bouquetItems.length === 0) {
+        alert("Please add at least one flower to your bouquet before finishing.");
+        return;
+    }
+
     showOnlySection("bouquetResultSection");
     renderResultSection();
 }
@@ -531,6 +536,13 @@ function addRandomFlower() {
 
 function saveBouquetDesign() {
     const saveMessage = document.getElementById("saveBouquetMessage");
+
+    if (bouquetItems.length === 0) {
+        if (saveMessage) {
+            saveMessage.textContent = "Please add at least one flower before saving.";
+        }
+        return;
+    }
 
     const bouquetData = {
         wrapping: selectedWrapping ? selectedWrapping.name : "Not selected",
