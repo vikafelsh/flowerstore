@@ -15,7 +15,7 @@
         "shortDescription": "Soft hydrangeas in pastel colors.",
         "fullDescription": "A delicate bouquet with hydrangeas. It looks gentle, elegant and is suitable for birthdays, family celebrations or stylish home decoration.",
         "price": "$52",
-        "image": "https://source.unsplash.com/900x600/?colorful-hydrangea,hydrangea-flowers"
+        "image": "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900&q=80"
     },
     {
         "id": 3,
@@ -24,7 +24,7 @@
         "shortDescription": "Fresh white chrysanthemums with greenery.",
         "fullDescription": "A light and elegant bouquet of white chrysanthemums. This bouquet is simple, fresh and suitable for many occasions.",
         "price": "$34",
-        "image": "https://source.unsplash.com/900x600/?white-chrysanthemum,chrysanthemum-flowers"
+        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=White+Chrysanthemums"
     },
     {
         "id": 4,
@@ -33,7 +33,7 @@
         "shortDescription": "Elegant white roses for a clean look.",
         "fullDescription": "A refined bouquet of white roses. It creates a calm and elegant impression and is perfect for gifts, celebrations and important events.",
         "price": "$48",
-        "image": "https://source.unsplash.com/900x600/?white-roses,bouquet"
+        "image": "https://images.unsplash.com/photo-1487530903081-59e0e3331512?auto=format&fit=crop&w=900&q=80"
     },
     {
         "id": 5,
