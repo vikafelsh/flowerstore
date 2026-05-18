@@ -598,7 +598,12 @@ h3 {
     justify-content: center;
 }
 
+#game-start-screen p {
+    margin-bottom: 30px; /* Додає відступ під текстом інструкції */
+}
+
 .game-btn {
+    margin-top: 20px; /* Додає відступ безпосередньо над кнопкою */
     height: 40px !important;
     min-width: 120px;
     padding: 0 15px !important;
