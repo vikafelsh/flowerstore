@@ -562,6 +562,8 @@ h3 {
     background: linear-gradient(#fff8f4, #fff);
     cursor: none;
     touch-action: none;
+    -webkit-user-select: none; /* Вимикає виділення тексту при натисканні */
+    user-select: none;
 }
 
 #game-over-screen,
