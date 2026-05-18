@@ -376,10 +376,10 @@ let basket = {
     y: canvas.height - 80,
     width: 120,
     height: 90,
-    maxSpeed: 12,
+    maxSpeed: 10,
     currentSpeed: 0,
-    acceleration: 2.5,
-    friction: 0.7
+    acceleration: 1.2,
+    friction: 0.85
 };
 
 // --- КЕРУВАННЯ ---
@@ -451,20 +451,24 @@ function spawnFlower() {
 function update() {
     if (!gameRunning) return;
 
-    // Рух через клавіатуру (якщо натиснуті клавіші)
-    if (keys.ArrowLeft || keys.a) basket.currentSpeed -= basket.acceleration;
-    else if (keys.ArrowRight || keys.d) basket.currentSpeed += basket.acceleration;
-    else {
+    // Керування клавіатурою
+    if (keys.ArrowLeft || keys.a) {
+        basket.currentSpeed -= basket.acceleration;
+    } else if (keys.ArrowRight || keys.d) {
+        basket.currentSpeed += basket.acceleration;
+    } else {
+        // Коли кнопки не натиснуті, тертя плавно зупиняє кошик
         basket.currentSpeed *= basket.friction;
         if (Math.abs(basket.currentSpeed) < 0.1) basket.currentSpeed = 0;
     }
 
+    // Обмеження швидкості
     if (basket.currentSpeed > basket.maxSpeed) basket.currentSpeed = basket.maxSpeed;
     if (basket.currentSpeed < -basket.maxSpeed) basket.currentSpeed = -basket.maxSpeed;
 
     basket.x += basket.currentSpeed;
 
-    // Межі екрана для клавіатури
+    // Межі екрана (залишаємо без змін)
     if (basket.x < 0) { basket.x = 0; basket.currentSpeed = 0; }
     if (basket.x > canvas.width - basket.width) { basket.x = canvas.width - basket.width; basket.currentSpeed = 0; }
 
