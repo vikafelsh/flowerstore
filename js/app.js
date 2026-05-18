@@ -336,10 +336,18 @@ const bgImg = new Image();
 bgImg.src = 'assets/background.jpg';
 
 const basketImg = new Image();
-basketImg.src = 'assets/basket.png'; // Порожній кошик
+basketImg.src = 'assets/basket.png'; // Порожній кошик (0 - 14 квітів)
 
-const basketFullImg = new Image();
-basketFullImg.src = 'assets/basketFullImg.png'; // Наповнений кошик (з'являється при рахунку 15)
+// --- НОВІ КАРТИНКИ ДЛЯ РІЗНИХ РІВНІВ ЗНИЖОК ---
+const basketFull15Img = new Image();
+basketFull15Img.src = 'assets/basketFull15.png'; // Наповнений кошик (15 - 29 квітів)
+
+const basketFull30Img = new Image();
+basketFull30Img.src = 'assets/basketFull30.png'; // Ще більше квітів (30 - 49 квітів)
+
+const basketFull50Img = new Image();
+basketFull50Img.src = 'assets/basketFull50.png'; // Максимально повний кошик (50+ квітів)
+// ----------------------------------------------
 
 const flowerFiles = [
     'flower1.1.png', 'flower1.2.png', 'flower1.3.png', 
@@ -390,7 +398,6 @@ document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = t
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
 // Сенсор (для телефонів)
-// Сенсор (для телефонів)
 canvas.addEventListener('touchstart', handleTouch, { passive: false });
 canvas.addEventListener('touchmove', handleTouch, { passive: false });
 canvas.addEventListener('touchend', () => {
@@ -399,22 +406,16 @@ canvas.addEventListener('touchend', () => {
 
 function handleTouch(e) {
     if (!gameRunning) return;
-    e.preventDefault(); // Блокуємо стандартний скрол сторінки
+    e.preventDefault(); 
 
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
     
-    // Розраховуємо коефіцієнт масштабування
-    // (внутрішня ширина 400 / реальна ширина на екрані)
     const scaleX = canvas.width / rect.width;
-    
-    // Отримуємо точну координату X відносно канвасу
     const touchX = (touch.clientX - rect.left) * scaleX;
 
-    // Центруємо кошик по пальцю
     basket.x = touchX - basket.width / 2;
 
-    // Обмеження меж
     if (basket.x < 0) basket.x = 0;
     if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
 }
@@ -451,26 +452,22 @@ function spawnFlower() {
 function update() {
     if (!gameRunning) return;
 
-    // Керування клавіатурою
     if (keys.ArrowLeft || keys.a) {
         basket.currentSpeed -= basket.acceleration;
     } else if (keys.ArrowRight || keys.d) {
         basket.currentSpeed += basket.acceleration;
     } else {
-        // Коли кнопки не натиснуті, тертя плавно зупиняє кошик
         basket.currentSpeed *= basket.friction;
         if (Math.abs(basket.currentSpeed) < 0.1) basket.currentSpeed = 0;
     }
 
-    // Обмеження швидкості
     if (basket.currentSpeed > basket.maxSpeed) basket.currentSpeed = basket.maxSpeed;
     if (basket.currentSpeed < -basket.maxSpeed) basket.currentSpeed = -basket.maxSpeed;
 
     basket.x += basket.currentSpeed;
 
-    // Межі екрана (залишаємо без змін)
     if (basket.x < 0) { basket.x = 0; basket.currentSpeed = 0; }
-    if (basket.x > canvas.width - basket.width) { basket.x = canvas.width - basket.width; basket.currentSpeed = 0; }
+    if (basket.x > canvas.width - basket.width) { canvas.width - basket.width; basket.currentSpeed = 0; }
 
     spawnFlower();
 
@@ -500,14 +497,21 @@ function draw() {
 
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-    // Display the basket based on progress
-    if (score >= 15 && basketFullImg.complete) {
-        // Full basket when discount is earned
-        ctx.drawImage(basketFullImg, basket.x, basket.y, basket.width, basket.height);
+    // --- ОНОВЛЕНА ЛОГІКА ЕВОЛЮЦІЇ КОРЗИНИ ---
+    if (score >= 50 && basketFull50Img.complete) {
+        // 50+ квітів — Максимальний рівень
+        ctx.drawImage(basketFull50Img, basket.x, basket.y, basket.width, basket.height);
+    } else if (score >= 30 && basketFull30Img.complete) {
+        // 30-49 квітів — Середній рівень
+        ctx.drawImage(basketFull30Img, basket.x, basket.y, basket.width, basket.height);
+    } else if (score >= 15 && basketFull15Img.complete) {
+        // 15-29 квітів — Перший рівень
+        ctx.drawImage(basketFull15Img, basket.x, basket.y, basket.width, basket.height);
     } else {
-        // Empty basket during the progress
+        // Порожній кошик за замовчуванням
         ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
     }
+    // ----------------------------------------
 
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
@@ -521,7 +525,6 @@ function draw() {
     
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
-    // Changed to English
     ctx.fillText(`Score: ${score}`, 25, 35);
 }
 
@@ -532,7 +535,6 @@ function endGame() {
     
     finalScoreText.textContent = `Flowers caught: ${score}`;
     
-    // Thresholds
     const goal10 = 15;
     const goal15 = 30;
     const goal20 = 50;
