@@ -1131,6 +1131,31 @@ canvas {
     text-align: center;
 }
 
+.builder-back-btn {
+    position: absolute;
+    top: -52px;
+    left: 0;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 999px;
+    background: #f5d4df;
+    color: #5a3a45;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(120, 70, 90, 0.12);
+    transition: 0.25s ease;
+}
+
+.builder-back-btn:hover {
+    background: #cf6f94;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.custom-builder {
+    position: relative;
+}
+
 /* Footer */
 
 footer {
