@@ -5,6 +5,7 @@ let currentProducts = [];
 let currentCategoryId = "";
 let currentCategoryName = "";
 let selectedProduct = null;
+let currentDiscount = 0;
 
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const navMenu = document.getElementById("navMenu");
@@ -118,6 +119,7 @@ function renderProductsByCategory(categoryId, categoryName) {
 
 function openProductDetails(product) {
     selectedProduct = product;
+    currentDiscount = 0;
 
     const labels = {
         gift_bouquets: "Gift bouquet",
@@ -133,6 +135,9 @@ function openProductDetails(product) {
     document.getElementById("detailsName").textContent = product.name;
     document.getElementById("detailsDescription").textContent = product.fullDescription;
 
+    document.getElementById("promoInput").value = "";
+    document.getElementById("promoMessage").textContent = "";
+
     const quantityBox = document.getElementById("quantityBox");
     const quantityInput = document.getElementById("quantityInput");
     const quantityMessage = document.getElementById("quantityMessage");
@@ -146,7 +151,7 @@ function openProductDetails(product) {
         updateProductTotal();
     } else {
         quantityBox.style.display = "none";
-        document.getElementById("detailsPrice").textContent = product.price;
+        updateProductTotal();
     }
 
     showSection("productDetailsPage");
@@ -161,25 +166,67 @@ function updateProductTotal() {
     const quantityMessage = document.getElementById("quantityMessage");
     const detailsPrice = document.getElementById("detailsPrice");
 
-    const quantity = Number(quantityInput.value);
+    const flowerCategories = ["gift_bouquets", "wedding_flowers", "seasonal_flowers"];
+    const isFlowerProduct = flowerCategories.includes(selectedProduct.categoryId);
+
     const productPrice = Number(selectedProduct.price.replace("$", ""));
+    let quantity = 1;
 
-    if (quantity > 100) {
-        quantityMessage.textContent = "For more than 100 flowers, please contact the shop to confirm availability.";
-        detailsPrice.textContent = "Contact shop";
+    if (isFlowerProduct) {
+        quantity = Number(quantityInput.value);
+
+        if (quantity > 100) {
+            quantityMessage.textContent = "For more than 100 flowers, please contact the shop to confirm availability.";
+            detailsPrice.textContent = "Contact shop";
+            return;
+        }
+
+        if (quantity < 1 || isNaN(quantity)) {
+            quantityMessage.textContent = "Please enter a valid quantity.";
+            detailsPrice.textContent = selectedProduct.price;
+            return;
+        }
+
+        quantityMessage.textContent = "";
+    }
+
+    const totalBeforeDiscount = productPrice * quantity;
+    const totalAfterDiscount = totalBeforeDiscount - (totalBeforeDiscount * currentDiscount);
+
+    detailsPrice.textContent = `$${totalAfterDiscount.toFixed(2)}`;
+}
+
+function applyPromoCode() {
+    if (!selectedProduct) {
         return;
     }
 
-    if (quantity < 1 || isNaN(quantity)) {
-        quantityMessage.textContent = "Please enter a valid quantity.";
-        detailsPrice.textContent = selectedProduct.price;
-        return;
+    const promoInput = document.getElementById("promoInput");
+    const promoMessage = document.getElementById("promoMessage");
+
+    const promoCode = promoInput.value.trim().toUpperCase();
+
+    const discounts = {
+        BLOOM10: 0.10,
+        BLOOM15: 0.15,
+        BLOOM20: 0.20
+    };
+
+    if (discounts[promoCode]) {
+        currentDiscount = discounts[promoCode];
+        updateProductTotal();
+
+        promoMessage.textContent = `Promo code applied: ${promoCode}`;
+        promoMessage.classList.remove("promo-error");
+        promoMessage.classList.add("promo-success");
+    } else {
+        currentDiscount = 0;
+        updateProductTotal();
+
+        promoMessage.textContent = "Invalid promo code.";
+        promoMessage.classList.remove("promo-success");
+        promoMessage.classList.add("promo-error");
     }
-
-    quantityMessage.textContent = "";
-
-    const totalPrice = productPrice * quantity;
-    detailsPrice.textContent = `$${totalPrice}`;
 }
 
 function backToCurrentCategory() {
