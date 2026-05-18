@@ -1,134 +1,134 @@
 [
     {
         "id": "rose",
-        "name": "Троянда",
-        "type": "Класична квітка",
+        "name": "Rose",
+        "type": "Classic flower",
         "price": 4,
         "defaultSize": 90,
         "colors": [
             {
                 "id": "red",
-                "name": "Червона",
+                "name": "Red",
                 "image": "assets/flowers/red_rose.png"
             },
             {
                 "id": "white",
-                "name": "Біла",
+                "name": "White",
                 "image": "assets/flowers/white_rose.png"
             },
             {
                 "id": "pink",
-                "name": "Рожева",
+                "name": "Pink",
                 "image": "assets/flowers/pink_rose.png"
             }
         ]
     },
     {
         "id": "tulip",
-        "name": "Тюльпан",
-        "type": "Сезонна квітка",
+        "name": "Tulip",
+        "type": "Seasonal flower",
         "price": 3,
         "defaultSize": 85,
         "colors": [
             {
                 "id": "yellow",
-                "name": "Жовтий",
+                "name": "Yellow",
                 "image": "assets/flowers/yellow_tulip.png"
             },
             {
                 "id": "pink",
-                "name": "Рожевий",
+                "name": "Pink",
                 "image": "assets/flowers/pink_tulip.png"
             },
             {
                 "id": "purple",
-                "name": "Фіолетовий",
+                "name": "Purple",
                 "image": "assets/flowers/purple_tulip.png"
             }
         ]
     },
     {
         "id": "lily",
-        "name": "Лілія",
-        "type": "Весільна квітка",
+        "name": "Lily",
+        "type": "Wedding flower",
         "price": 5,
         "defaultSize": 110,
         "colors": [
             {
                 "id": "white",
-                "name": "Біла",
+                "name": "White",
                 "image": "assets/flowers/white_lily.png"
             },
             {
                 "id": "pink",
-                "name": "Рожева",
+                "name": "Pink",
                 "image": "assets/flowers/pink_lily.png"
             },
             {
                 "id": "orange",
-                "name": "Помаранчева",
+                "name": "Orange",
                 "image": "assets/flowers/orange_lily.png"
             }
         ]
     },
     {
         "id": "peony",
-        "name": "Півонія",
-        "type": "Сезонна квітка",
+        "name": "Peony",
+        "type": "Seasonal flower",
         "price": 6,
         "defaultSize": 105,
         "colors": [
             {
                 "id": "pink",
-                "name": "Рожева",
+                "name": "Pink",
                 "image": "assets/flowers/pink_peony.png"
             },
             {
                 "id": "white",
-                "name": "Біла",
+                "name": "White",
                 "image": "assets/flowers/white_peony.png"
             },
             {
                 "id": "coral",
-                "name": "Коралова",
+                "name": "Coral",
                 "image": "assets/flowers/coral_peony.png"
             }
         ]
     },
     {
         "id": "chrysanthemum",
-        "name": "Хризантема",
-        "type": "Подарункова квітка",
+        "name": "Chrysanthemum",
+        "type": "Gift flower",
         "price": 3,
         "defaultSize": 95,
         "colors": [
             {
                 "id": "white",
-                "name": "Біла",
+                "name": "White",
                 "image": "assets/flowers/white_chrysanthemum.png"
             },
             {
                 "id": "yellow",
-                "name": "Жовта",
+                "name": "Yellow",
                 "image": "assets/flowers/yellow_chrysanthemum.png"
             },
             {
                 "id": "purple",
-                "name": "Фіолетова",
+                "name": "Purple",
                 "image": "assets/flowers/purple_chrysanthemum.png"
             }
         ]
     },
     {
         "id": "eucalyptus",
-        "name": "Евкаліпт",
-        "type": "Декоративна зелень",
+        "name": "Eucalyptus",
+        "type": "Decorative greenery",
         "price": 2,
         "defaultSize": 100,
         "colors": [
             {
                 "id": "green",
-                "name": "Зелений",
+                "name": "Green",
                 "image": "assets/flowers/eucalyptus.png"
             }
         ]
