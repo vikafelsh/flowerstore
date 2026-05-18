@@ -562,7 +562,7 @@ h3 {
     background: linear-gradient(#fff8f4, #fff);
     cursor: none;
     touch-action: none;
-    -webkit-user-select: none; /* Вимикає виділення тексту при натисканні */
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -599,11 +599,11 @@ h3 {
 }
 
 #game-start-screen p {
-    margin-bottom: 30px; /* Додає відступ під текстом інструкції */
+    margin-bottom: 30px; 
 }
 
 .game-btn {
-    margin-top: 20px; /* Додає відступ безпосередньо над кнопкою */
+    margin-top: 20px; 
     height: 40px !important;
     min-width: 120px;
     padding: 0 15px !important;
