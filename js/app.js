@@ -469,17 +469,17 @@ function update() {
             flowerCenterX > basketActiveLeft && 
             flowerCenterX < basketActiveRight) {
             
-            // Шукай цей блок усередині update(), де квітка ловиться:
+            // Усередині update(), де квітка ловиться:
             if (f.y < basket.y + basket.height) {
                 if (caughtFlowers.length < maxVisualFlowers) {
-                    // Розраховуємо безпечну зону всередині (центр кошика)
-                    const safeWidth = basket.width - 60; // Вузька зона, щоб не вилазило
+                    // Зона появи стала ще вужчою, щоб квіти не торкалися країв кошика
+                    const safeWidth = basket.width - 70; 
                     caughtFlowers.push({
                         img: f.img,
-                        offsetX: 30 + Math.random() * safeWidth, // Починаємо з 30px від краю
-                        offsetY: 10 + Math.random() * 15,       // Невелика глибина
-                        w: 45, // Фіксована ширина для трофеїв
-                        h: 45  // Фіксована висота, щоб не плющило
+                        offsetX: 35 + Math.random() * safeWidth, 
+                        offsetY: Math.random() * 10, // Мінімальний розкид по вертикалі
+                        w: 40, // Невеличкий розмір, щоб влізали в "щілину"
+                        h: 40
                     });
                 }
                 flowers.splice(i, 1);
@@ -508,34 +508,35 @@ function endGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Фон
+    // 1. Малюємо фон
     if (bgImg.complete) {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     }
 
-    // 2. Спочатку малюємо порожню корзину
+    // 2. Малюємо кошик (він служить і задньою, і передньою стінкою одночасно)
     ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 3. Малюємо спіймані квіти ТІЛЬКИ всередині безпечної зони
+    // 3. Малюємо квіти всередині (з дуже суворою обрізкою)
     ctx.save();
     ctx.beginPath();
-    // Створюємо маску обрізки (строгий овал всередині плетіння)
+    // Цей овал — це "щілина" всередині плетіння. 
+    // Все, що виходить за його межі (вгору за задню стінку чи вниз на передню), зникне.
     ctx.ellipse(
         basket.x + basket.width / 2, 
-        basket.y + 40, 
-        basket.width / 2 - 25, // Сувора ширина
-        12,                    // Сувора висота
+        basket.y + 55, // Опустили центр маски нижче вглиб кошика
+        basket.width / 2 - 30, // Вузька маска по боках
+        10, // Дуже пласка маска (відрізає верх і задня стінка залишається чистою)
         0, 0, Math.PI * 2
     );
     ctx.clip();
 
     caughtFlowers.forEach(cf => {
-        // Малюємо квіти. Якщо картинка ще вантажиться, воно не зламає пропорції
-        ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 15, cf.w, cf.h);
+        // Малюємо квіти так, щоб їхній центр був у зоні маски
+        ctx.drawImage(cf.img, basket.x + cf.offsetX, basket.y + cf.offsetY + 35, cf.w, cf.h);
     });
     ctx.restore();
 
-    // 4. Падаючі квіти
+    // 4. Малюємо падаючі квіти
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
