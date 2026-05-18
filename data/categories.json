@@ -2,26 +2,26 @@
     {
         "id": "gift_bouquets",
         "name": "Gift Bouquets",
-        "image": "https://placehold.co/900x600/f7dfe6/5b3a46?text=Gift+Bouquets"
+        "image": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80"
     },
     {
         "id": "wedding_flowers",
         "name": "Wedding Flowers",
-        "image": "https://placehold.co/900x600/f3d5df/5b3a46?text=Wedding+Flowers"
+        "image": "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=900&q=80"
     },
     {
         "id": "seasonal_flowers",
         "name": "Seasonal Flowers",
-        "image": "https://placehold.co/900x600/fff0d9/5b3a46?text=Seasonal+Flowers"
+        "image": "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=900&q=80"
     },
     {
         "id": "indoor_plants",
         "name": "Indoor Plants",
-        "image": "https://placehold.co/900x600/dff0e2/5b3a46?text=Indoor+Plants"
+        "image": "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=900&q=80"
     },
     {
         "id": "gifts",
         "name": "Gifts",
-        "image": "https://placehold.co/900x600/e8def8/5b3a46?text=Gifts"
+        "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=900&q=80"
     }
 ]
