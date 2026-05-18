@@ -282,9 +282,7 @@ function searchProducts() {
     }
 
     const foundProducts = products.filter(function (product) {
-        return product.name.toLowerCase().includes(searchValue) ||
-               product.shortDescription.toLowerCase().includes(searchValue) ||
-               product.fullDescription.toLowerCase().includes(searchValue);
+        return product.name.toLowerCase().includes(searchValue)
     });
 
     if (foundProducts.length === 0) {
