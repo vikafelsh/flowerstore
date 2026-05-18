@@ -26,7 +26,7 @@ async function loadCustomBouquetData() {
         renderWrappingOptions();
         renderCustomFlowers();
     } catch (error) {
-        console.error("Помилка завантаження конструктора:", error);
+        console.error("Builder loading error:", error);
     }
 }
 
@@ -138,7 +138,7 @@ function renderCustomFlowers() {
             <div class="custom-flower-info">
                 <h4>${flower.name}</h4>
                 <p>${flower.type}</p>
-                <span>$${flower.price} за 1 шт.</span>
+                <span>$${flower.price} per item</span>
 
                 <div class="flower-colors">
                     ${flower.colors.map(color => `
@@ -173,17 +173,17 @@ function addFlowerWithColor(flowerId, colorId) {
     flowerCounter++;
 
     const flowerItem = {
-    itemId: `flower-${flowerCounter}`,
-    name: flower.name,
-    colorName: color.name,
-    price: flower.price,
-    image: color.image,
-    size: flower.defaultSize,
-    rotation: 0,
-    x: 50,
-    y: 50,
-    zIndex: flowerCounter
-    };  
+        itemId: `flower-${flowerCounter}`,
+        name: flower.name,
+        colorName: color.name,
+        price: flower.price,
+        image: color.image,
+        size: flower.defaultSize,
+        rotation: 0,
+        x: 50,
+        y: 50,
+        zIndex: flowerCounter
+    };
 
     bouquetItems.push(flowerItem);
     createFlowerElement(flowerItem);
@@ -288,6 +288,30 @@ function resizeSelectedFlower(amount) {
     setFlowerStyle(selectedFlowerElement, item);
 }
 
+function bringSelectedFlowerForward() {
+    if (!selectedFlowerElement) return;
+
+    const item = getBouquetItemByElement(selectedFlowerElement);
+    if (!item) return;
+
+    const maxZIndex = Math.max(...bouquetItems.map(flower => flower.zIndex || 1));
+
+    item.zIndex = maxZIndex + 1;
+    setFlowerStyle(selectedFlowerElement, item);
+}
+
+function sendSelectedFlowerBackward() {
+    if (!selectedFlowerElement) return;
+
+    const item = getBouquetItemByElement(selectedFlowerElement);
+    if (!item) return;
+
+    const minZIndex = Math.min(...bouquetItems.map(flower => flower.zIndex || 1));
+
+    item.zIndex = minZIndex - 1;
+    setFlowerStyle(selectedFlowerElement, item);
+}
+
 function deleteSelectedFlower() {
     if (!selectedFlowerElement) return;
 
@@ -346,14 +370,14 @@ function updateBouquetSummary() {
     if (selectedWrapping) {
         summary.innerHTML += `
             <p>
-                <strong>Оформлення:</strong>
+                <strong>Wrapping:</strong>
                 ${selectedWrapping.name}, ${selectedWrapping.variationName} — $${selectedWrapping.price}
             </p>
         `;
     }
 
     if (bouquetItems.length === 0) {
-        summary.innerHTML += `<p>Додайте квіти до букета.</p>`;
+        summary.innerHTML += `<p>Add flowers to your bouquet.</p>`;
     }
 
     groupFlowers().forEach(item => {
@@ -402,24 +426,24 @@ function renderResultSection() {
     }
 
     resultWrappingText.innerHTML = `
-        <strong>Оформлення:</strong>
-        ${selectedWrapping ? selectedWrapping.name : "Не вибрано"},
+        <strong>Wrapping:</strong>
+        ${selectedWrapping ? selectedWrapping.name : "Not selected"},
         ${selectedWrapping ? selectedWrapping.variationName : ""}
     `;
 
     resultFlowersList.innerHTML = "";
 
     if (bouquetItems.length === 0) {
-        resultFlowersList.innerHTML = "<li>Квіти ще не додані.</li>";
+        resultFlowersList.innerHTML = "<li>No flowers have been added yet.</li>";
     } else {
         groupFlowers().forEach(item => {
             const li = document.createElement("li");
-            li.textContent = `${item.name}, ${item.colorName} — ${item.count} шт.`;
+            li.textContent = `${item.name}, ${item.colorName} — ${item.count} pcs.`;
             resultFlowersList.appendChild(li);
         });
     }
 
-    resultTotalPrice.innerHTML = `<strong>Загальна ціна:</strong> $${calculateTotal()}`;
+    resultTotalPrice.innerHTML = `<strong>Total price:</strong> $${calculateTotal()}`;
 }
 
 function showOnlySection(sectionId) {
@@ -497,7 +521,8 @@ function addRandomFlower() {
         size: Math.max(60, flower.defaultSize + Math.floor(Math.random() * 25) - 10),
         rotation: Math.floor(Math.random() * 50) - 25,
         x: Math.floor(Math.random() * 55) + 22,
-        y: Math.floor(Math.random() * 35) + 18
+        y: Math.floor(Math.random() * 35) + 18,
+        zIndex: flowerCounter
     };
 
     bouquetItems.push(flowerItem);
@@ -508,7 +533,7 @@ function saveBouquetDesign() {
     const saveMessage = document.getElementById("saveBouquetMessage");
 
     const bouquetData = {
-        wrapping: selectedWrapping ? selectedWrapping.name : "Не вибрано",
+        wrapping: selectedWrapping ? selectedWrapping.name : "Not selected",
         variation: selectedWrapping ? selectedWrapping.variationName : "",
         flowers: bouquetItems,
         totalPrice: calculateTotal(),
@@ -518,30 +543,6 @@ function saveBouquetDesign() {
     localStorage.setItem("savedBouquet", JSON.stringify(bouquetData));
 
     if (saveMessage) {
-        saveMessage.textContent = "Букет збережено! Ви можете повернутися до нього пізніше.";
+        saveMessage.textContent = "Bouquet saved! You can come back to it later.";
     }
-}
-
-function bringSelectedFlowerForward() {
-    if (!selectedFlowerElement) return;
-
-    const item = getBouquetItemByElement(selectedFlowerElement);
-    if (!item) return;
-
-    const maxZIndex = Math.max(...bouquetItems.map(flower => flower.zIndex || 1));
-
-    item.zIndex = maxZIndex + 1;
-    setFlowerStyle(selectedFlowerElement, item);
-}
-
-function sendSelectedFlowerBackward() {
-    if (!selectedFlowerElement) return;
-
-    const item = getBouquetItemByElement(selectedFlowerElement);
-    if (!item) return;
-
-    const minZIndex = Math.min(...bouquetItems.map(flower => flower.zIndex || 1));
-
-    item.zIndex = minZIndex - 1;
-    setFlowerStyle(selectedFlowerElement, item);
 }
