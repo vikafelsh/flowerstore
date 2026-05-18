@@ -1767,16 +1767,15 @@ footer {
 .custom-builder {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr) 240px;
-    gap: 18px 24px;
+    gap: 24px;
     align-items: start;
-    margin-top: 28px;
+    position: relative;
 }
 
 .builder-back-btn {
-    grid-column: 1 / -1;
-    justify-self: start;
-    width: fit-content;
-    margin: 0;
+    position: absolute;
+    top: -52px;
+    left: 0;
     padding: 12px 22px;
     border-radius: 999px;
     background: #f5d4df;
@@ -1785,6 +1784,7 @@ footer {
     cursor: pointer;
     box-shadow: 0 8px 18px rgba(120, 70, 90, 0.12);
     transition: 0.25s ease;
+    z-index: 10;
 }
 
 .builder-back-btn:hover {
