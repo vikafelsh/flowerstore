@@ -127,6 +127,9 @@
             </div>
     
             <div id="builderStep" class="custom-builder hidden">
+            <button class="builder-back-btn" onclick="backToWrapping()">
+                ← Назад до оформлення
+            </button>
                 <div class="flowers-panel">
                     <h3>Квіти</h3>
                     <p class="builder-help-text">
@@ -149,13 +152,15 @@
                     </div>
     
                     <div class="builder-controls">
-                        <button onclick="rotateSelectedFlower(-15)">Повернути вліво</button>
-                        <button onclick="rotateSelectedFlower(15)">Повернути вправо</button>
-                        <button onclick="resizeSelectedFlower(10)">Збільшити</button>
-                        <button onclick="resizeSelectedFlower(-10)">Зменшити</button>
-                        <button onclick="deleteSelectedFlower()">Видалити</button>
-                        <button onclick="clearBouquet()">Очистити</button>
-                    </div>
+                    <button onclick="rotateSelectedFlower(-15)">Повернути вліво</button>
+                    <button onclick="rotateSelectedFlower(15)">Повернути вправо</button>
+                    <button onclick="resizeSelectedFlower(10)">Збільшити</button>
+                    <button onclick="resizeSelectedFlower(-10)">Зменшити</button>
+                    <button onclick="bringSelectedFlowerForward()">На передній план</button>
+                    <button onclick="sendSelectedFlowerBackward()">На задній план</button>
+                    <button onclick="deleteSelectedFlower()">Видалити</button>
+                    <button onclick="clearBouquet()">Очистити</button>
+                    </div>    
                 </div>
     
                 <div class="bouquet-summary">
