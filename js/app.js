@@ -331,16 +331,16 @@ function updateAccountNavbar() {
 
 /* Вставка Варі */
 
-// Змінні для візуального наповнення кошика
-let caughtFlowers = []; 
-const maxVisualFlowers = 20; 
-
 // 1. ЗАВАНТАЖЕННЯ ЗОБРАЖЕНЬ
 const bgImg = new Image();
 bgImg.src = 'assets/background.jpg';
 
 const basketImg = new Image();
-basketImg.src = 'assets/basket.png';
+basketImg.src = 'assets/basket.png'; // Порожній кошик
+
+// --- МІСЦЕ ДЛЯ НОВОЇ КАРТИНКИ ---
+const basketFullImg = new Image();
+basketFullImg.src = 'assets/basketFullImg.png'; 
 
 const flowerFiles = [
     'flower1.1.png', 'flower1.2.png', 'flower1.3.png', 
@@ -353,7 +353,7 @@ const flowerImages = flowerFiles.map(file => {
     return img;
 });
 
-// Елементи інтерфейсу
+// Елементи інтерфейсу та змінні гри (без змін)
 const canvas = document.getElementById('flowerGame');
 const ctx = canvas.getContext('2d');
 const startScreen = document.getElementById('game-start-screen');
@@ -384,7 +384,6 @@ let basket = {
 };
 
 let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
-
 document.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = true; });
 document.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
@@ -397,31 +396,21 @@ function spawnFlower() {
         if (spawnChance > 0.07) spawnChance = 0.07;
 
         if (Math.random() < spawnChance) {
-            let speedMin = 1.8 + (score * 0.15);
-            let speedMax = 3.0 + (score * 0.2);
-            if (speedMax > 8) speedMax = 8;
-            if (speedMin > 5) speedMin = 5;
-
             const flowerImg = flowerImages[Math.floor(Math.random() * flowerImages.length)];
-            const targetWidth = 55; 
-            
+            const targetWidth = 55;
             let targetHeight = targetWidth;
             if (flowerImg.naturalHeight > 0) {
-                const aspectRatio = flowerImg.naturalWidth / flowerImg.naturalHeight;
-                targetHeight = targetWidth / aspectRatio;
+                targetHeight = targetWidth / (flowerImg.naturalWidth / flowerImg.naturalHeight);
             }
 
-            const margin = 30;
-
             flowers.push({
-                x: margin + Math.random() * (canvas.width - targetWidth - margin * 2),
+                x: 30 + Math.random() * (canvas.width - targetWidth - 60),
                 y: -targetHeight - 10,
                 width: targetWidth,
                 height: targetHeight,
-                speed: speedMin + Math.random() * (speedMax - speedMin),
+                speed: 1.8 + (score * 0.1) + Math.random() * 1.5,
                 img: flowerImg
             });
-
             framesSinceLastSpawn = 0;
         }
     }
@@ -430,11 +419,9 @@ function spawnFlower() {
 function update() {
     if (!gameRunning) return;
 
-    if (keys.ArrowLeft || keys.a) {
-        basket.currentSpeed -= basket.acceleration;
-    } else if (keys.ArrowRight || keys.d) {
-        basket.currentSpeed += basket.acceleration;
-    } else {
+    if (keys.ArrowLeft || keys.a) basket.currentSpeed -= basket.acceleration;
+    else if (keys.ArrowRight || keys.d) basket.currentSpeed += basket.acceleration;
+    else {
         basket.currentSpeed *= basket.friction;
         if (Math.abs(basket.currentSpeed) < 0.1) basket.currentSpeed = 0;
     }
@@ -444,14 +431,8 @@ function update() {
 
     basket.x += basket.currentSpeed;
 
-    if (basket.x < 0) {
-        basket.x = 0;
-        basket.currentSpeed = 0;
-    }
-    if (basket.x > canvas.width - basket.width) {
-        basket.x = canvas.width - basket.width;
-        basket.currentSpeed = 0;
-    }
+    if (basket.x < 0) { basket.x = 0; basket.currentSpeed = 0; }
+    if (basket.x > canvas.width - basket.width) { basket.x = canvas.width - basket.width; basket.currentSpeed = 0; }
 
     spawnFlower();
 
@@ -465,32 +446,11 @@ function update() {
         const basketActiveRight = basket.x + basket.width - 25;
         const basketTop = basket.y + 30;
 
-        if (flowerBottomY > basketTop && 
-            flowerCenterX > basketActiveLeft && 
-            flowerCenterX < basketActiveRight) {
-            
+        if (flowerBottomY > basketTop && flowerCenterX > basketActiveLeft && flowerCenterX < basketActiveRight) {
             if (f.y < basket.y + basket.height) {
-            if (caughtFlowers.length < maxVisualFlowers) {
-                // РОЗШИРЮЄМО зону появи, щоб зліва теж були квіти
-                const safeWidth = basket.width - 40; 
-                
-                // Зберігаємо пропорції картинки
-                const trophyWidth = 40;
-                let trophyHeight = trophyWidth;
-                if (f.img.naturalHeight > 0) {
-                    trophyHeight = trophyWidth / (f.img.naturalWidth / f.img.naturalHeight);
-                }
-        
-                caughtFlowers.push({
-                    img: f.img,
-                    offsetX: 15 + Math.random() * safeWidth, // Починаємо ближче до лівого краю
-                    offsetY: Math.random() * 12, 
-                    w: trophyWidth,
-                    h: trophyHeight
-                });
-            }
-            flowers.splice(i, 1);
-            score++;
+                flowers.splice(i, 1);
+                score++;
+                // Анімацію прибрано — квіти просто додаються до рахунку
             }
         } else if (f.y > canvas.height) {
             endGame();
@@ -498,60 +458,25 @@ function update() {
     }
 }
 
-function endGame() {
-    gameRunning = false;
-    cancelAnimationFrame(animationId);
-    gameOverScreen.classList.remove('hidden');
-    finalScoreText.textContent = `Спіймано квітів: ${score}`;
-    
-    let goal = 15;
-    if (score >= goal) {
-        discountInfoText.textContent = "Вітаємо! Ваша знижка 10%: BLOOM10";
-    } else {
-        discountInfoText.textContent = `До знижки не вистачило ${goal - score} шт.`;
-    }
-}
-
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (bgImg.complete) ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    
-    // 1. Малюємо кошик
-    ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
 
-    // 2. МАЛЮЄМО КВІТИ З ПРАВИЛЬНОЮ ОБРІЗКОЮ
-    ctx.save();
-    
-    // Створюємо зону обрізки
-    ctx.beginPath();
-    ctx.ellipse(
-        basket.x + basket.width / 2, 
-        basket.y + 40, // Центр отвору
-        basket.width / 2 - 12, // Розширили, щоб зліва і справа було більше місця
-        18, // Збільшили висоту маски, щоб квіти не обрізалися зверху/знизу
-        0, 0, Math.PI * 2
-    );
-    ctx.clip();
+    // ЛОГІКА ЗМІНИ КОРЗИНИ
+    if (score >= 15 && basketFullImg.complete) {
+        // Якщо 15+ квітів, малюємо наповнену корзину
+        ctx.drawImage(basketFullImg, basket.x, basket.y, basket.width, basket.height);
+    } else {
+        // До 15 квітів малюємо порожню
+        ctx.drawImage(basketImg, basket.x, basket.y, basket.width, basket.height);
+    }
 
-    caughtFlowers.forEach(cf => {
-        // Використовуємо індивідуальну висоту cf.h, щоб не було ефекту приплюснутості
-        ctx.drawImage(
-            cf.img, 
-            basket.x + cf.offsetX, 
-            basket.y + cf.offsetY + 15, 
-            cf.w, 
-            cf.h
-        );
-    });
-
-    ctx.restore();
-
-    // 3. Падаючі квіти та рахунок
     flowers.forEach(f => {
         ctx.drawImage(f.img, f.x, f.y, f.width, f.height);
     });
-    
+
+    // Плашка рахунку
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
     ctx.roundRect(10, 10, 140, 35, 10); 
@@ -559,6 +484,19 @@ function draw() {
     ctx.fillStyle = '#5b3a46';
     ctx.font = 'bold 20px Poppins';
     ctx.fillText(`Рахунок: ${score}`, 25, 35);
+}
+
+function endGame() {
+    gameRunning = false;
+    cancelAnimationFrame(animationId);
+    gameOverScreen.classList.remove('hidden');
+    finalScoreText.textContent = `Спіймано квітів: ${score}`;
+    let goal = 15;
+    if (score >= goal) {
+        discountInfoText.textContent = "Вітаємо! Ваша знижка 10%: BLOOM10";
+    } else {
+        discountInfoText.textContent = `До знижки не вистачило ${goal - score} шт.`;
+    }
 }
 
 function gameLoop() {
@@ -572,7 +510,6 @@ function startGame() {
     gameRunning = true;
     score = 0;
     flowers = [];
-    caughtFlowers = []; 
     framesSinceLastSpawn = 0;
     basket.x = canvas.width / 2 - basket.width / 2;
     startScreen.classList.add('hidden');
@@ -582,17 +519,6 @@ function startGame() {
 
 if (startBtn) startBtn.onclick = startGame;
 if (restartBtn) restartBtn.onclick = startGame;
-
-const originalShowSection = showSection;
-showSection = function(id) {
-    if (typeof originalShowSection === 'function') originalShowSection(id);
-    if (id === 'game') {
-        gameRunning = false;
-        startScreen.classList.remove('hidden');
-        gameOverScreen.classList.add('hidden');
-        draw(); 
-    }
-};
 
 basketImg.onload = () => draw();
 bgImg.onload = () => draw();
