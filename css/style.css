@@ -2237,3 +2237,90 @@ footer {
         padding: 13px 20px;
     }
 }
+/* Fix wrapping options on very small screens */
+@media (max-width: 575px) {
+    .wrapping-card {
+        overflow: hidden;
+        padding: 22px 16px;
+    }
+
+    .wrapping-variations-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 18px;
+        overflow: visible !important;
+        padding: 18px 0 0;
+    }
+
+    .wrapping-variation-item {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: none !important;
+
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        align-items: center;
+        gap: 14px;
+
+        background: #fff8f4;
+        border-radius: 22px;
+        padding: 12px;
+    }
+
+    .wrapping-variation-image {
+        width: 120px;
+        height: 120px;
+        overflow: visible;
+    }
+
+    .wrapping-variation-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .wrapping-variation-btn {
+        width: 100%;
+        min-height: 46px;
+        border-radius: 18px;
+        font-size: 14px;
+        text-align: center;
+    }
+}
+/* Fix wrapping options for 576px–767px */
+@media (min-width: 576px) and (max-width: 767px) {
+    .wrapping-variations-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+
+    .wrapping-variation-item {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: none !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .wrapping-variation-image {
+        width: 100%;
+        height: 150px;
+        overflow: visible;
+    }
+
+    .wrapping-variation-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .wrapping-variation-btn {
+        width: 100%;
+        min-height: 44px;
+        border-radius: 18px;
+        font-size: 14px;
+    }
+}
